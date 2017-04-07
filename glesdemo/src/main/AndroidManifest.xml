@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.chinatsp.glesdemo">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme.NoTitle">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".demos.HelloActivity" />
+        <activity android:name=".demos.DrawPointActivity" />
+        <activity android:name=".demos.DrawLineActivity" />
+        <activity android:name=".demos.DrawTriangleActivity" />
+        <activity android:name=".demos.DrawIcosahedronActivity" />
+        <activity android:name=".demos.DrawSolarSystemActivity" />
+        <activity android:name=".demos.DrawSphereActivity" />
+        <activity android:name=".demos.LightingActivity" />
+        <activity android:name=".demos.CubeActivity" />
+        <activity android:name=".demos.DrawArrowActivity" />
+        <activity android:name=".demos.BitmapMatrixActivity" />
+        <activity android:name=".demos.LandMarkActivity"></activity>
+    </application>
+
+</manifest>
