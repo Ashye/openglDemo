@@ -1,6 +1,7 @@
 package com.chinatsp.glesdemo.demos.Model;
 
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -106,9 +107,16 @@ public class LandMark {
         imageBuffer.get(pix);
 
         Bitmap bmp = Bitmap.createBitmap(pix, imageWidth, imageHeight, Bitmap.Config.ARGB_8888);
+
+        //图片上下颠倒纠正
+        Matrix matrix = new Matrix();
+        matrix.setScale(1, -1);
+        bmp = Bitmap.createBitmap(bmp, 0,0,bmp.getWidth(), bmp.getHeight(), matrix, true);
+
+
         FileOutputStream fos = null;
         try {
-            String name = "opengl_"+System.currentTimeMillis()+ ".png";
+            String name = "opengl_.png";
             fos = new FileOutputStream("/sdcard/"+name);
             bmp.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.flush();
