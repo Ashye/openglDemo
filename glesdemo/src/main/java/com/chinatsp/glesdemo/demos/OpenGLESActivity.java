@@ -45,6 +45,7 @@ public abstract class OpenGLESActivity extends AppCompatActivity implements Open
 //            }
 //        });
         mGlSurfaceView.setRenderer(new OpenGLRenderer(this));
+        mGlSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         setContentView(mGlSurfaceView);
     }
 

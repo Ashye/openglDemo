@@ -1,5 +1,6 @@
 package com.chinatsp.glesdemo.demos;
 
+import android.graphics.Point;
 import android.opengl.GLU;
 
 import com.chinatsp.glesdemo.demos.Model.LandMark;
@@ -8,7 +9,9 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class LandMarkActivity extends OpenGLESActivity {
 
-    private LandMark landMark = new LandMark();
+
+
+    private LandMark landMark;
 
     private float[] routePoints = {
             0,0,1,1,
@@ -21,6 +24,17 @@ public class LandMarkActivity extends OpenGLESActivity {
         0,0,8,1,
 
     };
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Point point = new Point();
+        getWindow().getWindowManager().getDefaultDisplay().getSize(point);
+
+        landMark = new LandMark(point.x, point.y);
+    }
 
     @Override
     public void DrawScene(GL10 gl) {
