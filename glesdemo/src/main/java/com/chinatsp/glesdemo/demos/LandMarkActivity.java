@@ -51,15 +51,27 @@ public class LandMarkActivity extends OpenGLESActivity {
 
         gl.glPushMatrix();
 
-        for (int i=routePoints.length; i >0; i-=4) {
+//        for (int i=routePoints.length; i >0; i-=4) {
+//            可以实现清除所画内容
+//            gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+
+            //深度与角度通过路径点计算
+            //深度就是往前的路径点索引
+            landMark.setDepth(8);
+            //
+            landMark.setAngle(calculateAngle());
+
             landMark.draw(gl);
-            gl.glTranslatef(0, 0, -2.5f);
-            gl.glScalef(0.9f, 0.9f, 0.9f);
-            landMark.angle = -5;
-        }
+//        }
 
         gl.glPopMatrix();
+    }
 
+    private float calculateAngle() {
+
+
+
+        return 20;
     }
 
 }

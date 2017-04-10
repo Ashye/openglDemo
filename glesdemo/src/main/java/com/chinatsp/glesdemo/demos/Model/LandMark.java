@@ -20,6 +20,10 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class LandMark {
 
+    //负值右转；正值左转
+    private float angle = 0f;
+    private int depth = 1;
+
     private int width;
     private int height;
     private int imageWidth = 300;
@@ -29,9 +33,6 @@ public class LandMark {
     private float xSize = 2f;
     private float ySize = 0.5f;
     private float zSize = 1f;
-
-    //负值右转；正值左转
-    public float angle = 0f;
 
     private float[] vertexUnit = new float[] {
             0,0,0,1,
@@ -80,10 +81,27 @@ public class LandMark {
     }
 
 
+    public void setAngle(float angle) {
+        this.angle = angle;
+    }
+
+    public void setDepth(int depth) {
+        this.depth = depth;
+        if (this.depth <1) {
+            this.depth = 1;
+        }
+    }
+
     public void draw(GL10 gl) {
 
         if (angle != 0) {
             gl.glRotatef(angle, 0, 1, 0);
+        }
+
+        //根据深度设置大小
+        for (int i=0; i< depth; i++) {
+            gl.glTranslatef(0, 0, -2.5f);
+            gl.glScalef(0.9f, 0.9f, 0.9f);
         }
 
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
@@ -105,6 +123,8 @@ public class LandMark {
         imageBuffer.position(0);
         int pix[] = new int[imageWidth*imageHeight];
         imageBuffer.get(pix);
+
+
 
         Bitmap bmp = Bitmap.createBitmap(pix, imageWidth, imageHeight, Bitmap.Config.ARGB_8888);
 
