@@ -30,17 +30,30 @@ public class LandMark {
     private int imageHeight = 100;
 
 
-    private float xSize = 2f;
-    private float ySize = 1f;
-    private float zSize = 1f;
+//    private float xOffset = 2f;
+//    private float ySize = 1f;
+//    private float zOffset = 1f;
+//
+//    private float[] vertexUnit = new float[] {
+//            0,0,0,1,
+//            -xOffset,-ySize,0,1,
+//            -xOffset,-ySize,zOffset,1,
+//            0,0,zOffset,1,
+//            xOffset,-ySize,0,1,
+//            xOffset, -ySize,zOffset,1,
+//    };
+
+    private float xOffset = 2f;
+    private final float zWidth = 0.8f;
+    private float zOffset = 1.3f;
 
     private float[] vertexUnit = new float[] {
             0,0,0,1,
-            -xSize,-ySize,0,1,
-            -xSize,-ySize,zSize,1,
-            0,0,zSize,1,
-            xSize,-ySize,0,1,
-            xSize, -ySize,zSize,1,
+            -xOffset,0, zOffset,1,
+            -xOffset,0, zWidth + zOffset,1,
+            0,0, zWidth,1,
+            xOffset,0, zOffset,1,
+            xOffset, 0, zWidth + zOffset,1,
     };
 
     private short[] indices = new short[] {
@@ -100,7 +113,7 @@ public class LandMark {
 
         //根据深度设置大小
         for (int i=0; i< depth; i++) {
-            gl.glTranslatef(0, 0, -2.5f);
+            gl.glTranslatef(0, 0, -2f);
             gl.glScalef(0.9f, 0.9f, 0.9f);
         }
 

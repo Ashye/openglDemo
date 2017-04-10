@@ -46,7 +46,7 @@ public class LandMarkActivity extends OpenGLESActivity {
         gl.glLoadIdentity();
 
 
-        float[] eyePosition = {0,5,10};
+        float[] eyePosition = {0,10,10};
         GLU.gluLookAt(gl, eyePosition[0],eyePosition[1],eyePosition[2], 0,0,0, 0,1,0);
 
         gl.glPushMatrix();
@@ -71,7 +71,7 @@ public class LandMarkActivity extends OpenGLESActivity {
 
 
 
-        return -5;
+        return 5;
     }
 
 }
