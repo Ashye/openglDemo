@@ -31,7 +31,7 @@ public class LandMark {
 
 
     private float xSize = 2f;
-    private float ySize = 0.5f;
+    private float ySize = 1f;
     private float zSize = 1f;
 
     private float[] vertexUnit = new float[] {
@@ -76,7 +76,7 @@ public class LandMark {
         this.width = width;
         this.height = height;
         imageWidth = width;
-        imageHeight = height;
+        imageHeight = height /2;
         imageBuffer = IntBuffer.allocate(imageWidth * imageHeight);
     }
 
@@ -118,11 +118,28 @@ public class LandMark {
     private void saveBitmap(GL10 gl) {
         imageBuffer.position(0);
 
-        gl.glReadPixels(width/2 - imageWidth/2, height /2 - imageHeight/2, imageWidth, imageHeight, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, imageBuffer);
+        gl.glReadPixels(width/2 - imageWidth/2, height /2, imageWidth, imageHeight, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, imageBuffer);
 
         imageBuffer.position(0);
         int pix[] = new int[imageWidth*imageHeight];
         imageBuffer.get(pix);
+
+//        int alpha = 0;
+        int r;
+        int g;
+        int b;
+        int p;
+        for (int i = 0; i< pix.length ; i++) {
+            p = pix[i];
+//            alpha = (p & 0xff000000) >> 24;
+            r = (p & 0xff0000) >> 18;
+            g = (p & 0xff00) >> 8;
+            b = (p & 0xff);
+
+            if (r + g + b==0) {
+                pix[i] = 0 ;
+            }
+        }
 
 
 
