@@ -2,6 +2,8 @@ package com.chinatsp.glesdemo.demos.Model;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.os.Environment;
+import android.util.Log;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -166,8 +168,10 @@ public class LandMark {
 
         FileOutputStream fos = null;
         try {
-            String name = "opengl_.png";
-            fos = new FileOutputStream("/sdcard/"+name);
+            String name = Environment.getExternalStorageDirectory()+"/opengl_.png";
+
+            Log.e("sss", "sssssssssssss ->" + name);
+            fos = new FileOutputStream(name);
             bmp.compress(Bitmap.CompressFormat.PNG, 100, fos);
             fos.flush();
         } catch (FileNotFoundException e) {

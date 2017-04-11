@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.chinatsp.glesdemo.demos.AntiSmoothActivity;
 import com.chinatsp.glesdemo.demos.BitmapMatrixActivity;
 import com.chinatsp.glesdemo.demos.CubeActivity;
 import com.chinatsp.glesdemo.demos.DrawArrowActivity;
@@ -49,7 +50,8 @@ public class MainActivity extends AppCompatActivity {
             "Arrow",
 
             "Bitmap Matrix",
-            "LandMark"
+            "LandMark",
+            "Anti smooth"
     };
     private void initListView() {
         lvDemos = (ListView)findViewById(R.id.lv_demos);
@@ -96,6 +98,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 11:
                         startActivity(new Intent(MainActivity.this, LandMarkActivity.class));
+                        break;
+                    case 12:
+                        startActivity(new Intent(MainActivity.this, AntiSmoothActivity.class));
                         break;
                 }
 
