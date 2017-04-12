@@ -2,13 +2,25 @@ package com.chinatsp.glesdemo.demos;
 
 import android.graphics.Point;
 import android.opengl.GLU;
+import android.util.Log;
 
 import com.chinatsp.glesdemo.demos.Model.LandMark;
+
+import java.util.Vector;
 
 import javax.microedition.khronos.opengles.GL10;
 
 public class LandMarkActivity extends OpenGLESActivity {
 
+    //经纬度
+    private Vector<double[]> path = new Vector<>();
+
+    {
+        path.add(new double[]{37.0967970000,89.3321370000});
+        path.add(new double[]{37.1007120000,89.3417670000});
+        path.add(new double[]{37.1027120000,89.3487670000});
+        path.add(new double[]{37.1063530000,89.3539840000});
+    }
 
 
     private LandMark landMark;
@@ -40,6 +52,9 @@ public class LandMarkActivity extends OpenGLESActivity {
     public void DrawScene(GL10 gl) {
         super.DrawScene(gl);
 
+        long startTime = System.currentTimeMillis();
+        Log.e("ssssssss", "drawScene start ===>"+startTime);
+
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 
         gl.glMatrixMode(GL10.GL_MODELVIEW);
@@ -58,27 +73,49 @@ public class LandMarkActivity extends OpenGLESActivity {
         gl.glPushMatrix();
 
         antiSmooth(gl);
-        for (int i=routePoints.length; i >0; i-=4) {
+
+        float[] angles = calculateAngle(path);
+        for (int i=0; i< angles.length; i++) {
 //            可以实现清除所画内容
 //            gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 
             //深度与角度通过路径点计算
             //深度就是往前的路径点索引
-            landMark.setDepth(1);
+//            landMark.setDepth(1);
             //
-            landMark.setAngle(calculateAngle());
+            landMark.setAngle(angles[i]);
 
             landMark.draw(gl);
         }
 
         gl.glPopMatrix();
+        long endTime = System.currentTimeMillis();
+        Log.e("ssssssss", "drawScene end ===>"+ endTime + " duration:"+(endTime - startTime));
     }
 
-    private float calculateAngle() {
+    private float[] calculateAngle(Vector<double[]> path) {
+        float[] angles = new float[path.size()];
+        angles[0] = 0;
+        if (path.size() >1) {
+            double[] first;
+            double[] second;
+            for (int i=1; i<path.size(); i++) {
+                first = path.get(i-1);
+                second = path.get(i);
+//                Log.e("sss", "first:"+ first[0] + "  "+first[1]);
+//                Log.e("sss", "second:"+ second[0] + "  "+second[1]);
 
+                double x = second[0] - first[0];
+                double y = second[1] - first[1];
+                double an = Math.atan2(x, y) * 180 / Math.PI % 90;
+                angles[i] = Math.round(an);
+                Log.e("sss", "angle ==>"+an);
+//                Log.e("sss", "next ====");
+            }
 
+        }
 
-        return 5;
+        return angles;
     }
 
 
