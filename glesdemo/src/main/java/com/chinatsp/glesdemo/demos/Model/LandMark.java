@@ -49,6 +49,7 @@ public class LandMark {
     private final float zWidth = 0.8f;
     private float zOffset = 1.3f;
 
+
     private float[] vertexUnit = new float[] {
             0,0,0,1,
             -xOffset,0, zOffset,1,
@@ -90,8 +91,8 @@ public class LandMark {
         this();
         this.width = width;
         this.height = height;
-        imageWidth = width;
-        imageHeight = height /2;
+        imageWidth = 400;
+        imageHeight = 300;
         imageBuffer = IntBuffer.allocate(imageWidth * imageHeight);
     }
 
@@ -107,8 +108,10 @@ public class LandMark {
         }
     }
 
+
     public void draw(GL10 gl) {
 
+//        gl.glLineWidth(5);
         if (angle != 0) {
             gl.glRotatef(angle, 0, 1, 0);
         }
@@ -165,14 +168,19 @@ public class LandMark {
         matrix.setScale(1, -1);
         bmp = Bitmap.createBitmap(bmp, 0,0,bmp.getWidth(), bmp.getHeight(), matrix, true);
 
+//        matrix.reset();
+//        matrix.setScale(0.3f, .3f);
+//        bmp = Bitmap.createBitmap(bmp, 0,0,bmp.getWidth(), bmp.getHeight(), matrix, true);
+
+        bmp = Bitmap.createScaledBitmap(bmp, 100, 75, true);
 
         FileOutputStream fos = null;
         try {
-            String name = Environment.getExternalStorageDirectory()+"/opengl_.png";
+            String name = Environment.getExternalStorageDirectory()+"/opengl_.jpg";
 
             Log.e("sss", "sssssssssssss ->" + name);
             fos = new FileOutputStream(name);
-            bmp.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 30, fos);
             fos.flush();
         } catch (FileNotFoundException e) {
             e.printStackTrace();

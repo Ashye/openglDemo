@@ -18,6 +18,8 @@ public class LightingActivity extends OpenGLESActivity {
         float[] spec = { 1.0f, 1.0f, 1.0f, 1.0f, };
         float[] pos = { 0.0f, 20.0f, -5.0f, 1.0f, };
         float[] spot_dir = { 0.0f, -1.0f, 0.0f, };
+
+
         gl.glEnable(GL10.GL_DEPTH_TEST);
         gl.glEnable(GL10.GL_CULL_FACE);
 

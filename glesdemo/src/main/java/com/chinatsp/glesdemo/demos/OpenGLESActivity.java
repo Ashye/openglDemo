@@ -15,6 +15,18 @@ public abstract class OpenGLESActivity extends AppCompatActivity implements Open
     private GLSurfaceView mGlSurfaceView;
 
 
+    protected void antiSmooth(GL10 gl) {
+        gl.glEnable(GL10.GL_DEPTH_TEST);
+        gl.glEnable(GL10.GL_POINT_SMOOTH);
+        gl.glHint(GL10.GL_POINT_SMOOTH_HINT, GL10.GL_NICEST);
+
+        gl.glEnable(GL10.GL_LINE_SMOOTH);
+        gl.glHint(GL10.GL_LINE_SMOOTH_HINT, GL10.GL_NICEST);
+
+        gl.glEnable(GL10.GL_BLEND);
+        gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

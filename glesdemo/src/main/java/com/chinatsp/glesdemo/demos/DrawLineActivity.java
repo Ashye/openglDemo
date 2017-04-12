@@ -8,6 +8,13 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class DrawLineActivity extends OpenGLESActivity {
 
+//    float[] vertexArray = new float[]{
+//            -0.8f , -0.4f * 1.732f , 0.0f ,
+//            -0.4f , 0.4f * 1.732f , 0.0f ,
+//            0.0f , -0.4f * 1.732f , 0.0f ,
+//            0.4f , 0.4f * 1.732f , 0.0f ,
+//    };
+
     float[] vertexArray = new float[]{
             -0.8f , -0.4f * 1.732f , 0.0f ,
             -0.4f , 0.4f * 1.732f , 0.0f ,
@@ -30,10 +37,15 @@ public class DrawLineActivity extends OpenGLESActivity {
         gl.glLoadIdentity();
         gl.glTranslatef(0,0,-4);
 
+
+        antiSmooth(gl);
+
+        gl.glLineWidth(10);
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertex);
-        index ++;
-        index %= 10;
+
+//        index ++;
+//        index %= 10;
         switch (index) {
             case 0:
             case 1:
