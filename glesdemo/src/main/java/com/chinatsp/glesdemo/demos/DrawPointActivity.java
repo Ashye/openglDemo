@@ -14,6 +14,21 @@ public class DrawPointActivity extends OpenGLESActivity {
             0.0f , 0.4f * 1.732f , 0.0f ,
     };
 
+//    float[] vertexArray = {
+//            -1.0f, 1.0f, 1.0f,
+//            -1.0f, -1.0f, 1.0f,
+//            1.0f, -1.0f, 1.0f,
+//            1.0f, 1.0f, 1.0f,
+//
+//            //后面
+//            -1.0f, 1.0f, -1.0f,
+//            -1.0f, -1.0f, -1.0f,
+//            1.0f, -1.0f, -1.0f,
+//            1.0f, 1.0f, -1.0f,
+//    };
+
+//    short[] indices = {0,1,2,3,4,5,6,7};
+
     @Override
     public void DrawScene(GL10 gl) {
         super.DrawScene(gl);
@@ -24,6 +39,12 @@ public class DrawPointActivity extends OpenGLESActivity {
         vertex.put(vertexArray);
         vertex.position(0);
 
+//        ByteBuffer ibb = ByteBuffer.allocateDirect(indices.length * 2);
+//        ibb.order(ByteOrder.nativeOrder());
+//        ShortBuffer indice = ibb.asShortBuffer();
+//        indice.put(indices);
+//        indice.position(0);
+
         gl.glColor4f(1f, 0f,0f,1f);
         gl.glPointSize(8f);
         gl.glLoadIdentity();
@@ -31,7 +52,8 @@ public class DrawPointActivity extends OpenGLESActivity {
 
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertex);
-        gl.glDrawArrays(GL10.GL_POINTS, 0, 3);
+//        gl.glDrawElements(GL10.GL_POINTS, indices.length, GL10.GL_UNSIGNED_SHORT, indice);
+        gl.glDrawArrays(GL10.GL_POINTS, 0, vertexArray.length/3);
 
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
     }

@@ -176,11 +176,11 @@ public class LandMark {
 
         FileOutputStream fos = null;
         try {
-            String name = Environment.getExternalStorageDirectory()+"/opengl_.jpg";
+            String name = Environment.getExternalStorageDirectory()+"/opengl_.png";
 
             Log.e("sss", "sssssssssssss ->" + name);
             fos = new FileOutputStream(name);
-            bmp.compress(Bitmap.CompressFormat.JPEG, 30, fos);
+            bmp.compress(Bitmap.CompressFormat.PNG, 30, fos);
             fos.flush();
         } catch (FileNotFoundException e) {
             e.printStackTrace();

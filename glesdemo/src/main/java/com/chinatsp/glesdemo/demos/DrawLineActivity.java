@@ -20,6 +20,8 @@ public class DrawLineActivity extends OpenGLESActivity {
             -0.4f , 0.4f * 1.732f , 0.0f ,
             0.0f , -0.4f * 1.732f , 0.0f ,
             0.4f , 0.4f * 1.732f , 0.0f ,
+            -1f , -1f , 0.0f ,
+            2f , 2f , 0.0f ,
     };
 
     @Override
@@ -32,17 +34,17 @@ public class DrawLineActivity extends OpenGLESActivity {
         vertex.put(vertexArray);
         vertex.position(0);
 
-//        gl.glColor4f(1f, 0f,0f,1f);
-//        gl.glPointSize(8f);
+        gl.glColor4f(1f, 0f,0f,1f);
+        gl.glPointSize(8f);
         gl.glLoadIdentity();
         gl.glTranslatef(0,0,-4);
 
 
-        antiSmooth(gl);
+//        antiSmooth(gl);
 
         gl.glLineWidth(10);
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertex);
+        gl.glVertexPointer(4, GL10.GL_FLOAT, 0, vertex);
 
 //        index ++;
 //        index %= 10;

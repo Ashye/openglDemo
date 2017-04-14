@@ -1,1 +1,1 @@
-include ':app', ':glesdemo'
+include ':app', ':glesdemo', ':glesdemov2'

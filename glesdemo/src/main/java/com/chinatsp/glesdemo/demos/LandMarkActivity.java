@@ -5,6 +5,7 @@ import android.opengl.GLU;
 import android.util.Log;
 
 import com.chinatsp.glesdemo.demos.Model.LandMark;
+import com.chinatsp.glesdemo.demos.Model.Routine;
 
 import java.util.Vector;
 
@@ -16,14 +17,16 @@ public class LandMarkActivity extends OpenGLESActivity {
     private Vector<double[]> path = new Vector<>();
 
     {
-        path.add(new double[]{37.0967970000,89.3321370000});
-        path.add(new double[]{37.1007120000,89.3417670000});
-        path.add(new double[]{37.1027120000,89.3487670000});
-        path.add(new double[]{37.1063530000,89.3539840000});
+        path.add(new double[]{113.951534, 22.538099});
+        path.add(new double[]{113.951664, 22.538028});
+        path.add(new double[]{113.951814, 22.537958});
+        path.add(new double[]{113.951934, 22.537898});
+//        path.add(new double[]{41.2424760000,83.4663460000});
     }
 
 
     private LandMark landMark;
+    private Routine routine;
 
     private float[] routePoints = {
             0,0,1,1,
@@ -46,6 +49,7 @@ public class LandMarkActivity extends OpenGLESActivity {
         getWindow().getWindowManager().getDefaultDisplay().getSize(point);
 
         landMark = new LandMark(point.x, point.y);
+        routine = new Routine();
     }
 
     @Override
@@ -74,19 +78,21 @@ public class LandMarkActivity extends OpenGLESActivity {
 
         antiSmooth(gl);
 
-        float[] angles = calculateAngle(path);
-        for (int i=0; i< angles.length; i++) {
-//            可以实现清除所画内容
-//            gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+        routine.draw(gl);
 
-            //深度与角度通过路径点计算
-            //深度就是往前的路径点索引
-//            landMark.setDepth(1);
-            //
-            landMark.setAngle(angles[i]);
-
-            landMark.draw(gl);
-        }
+//        float[] angles = calculateAngle(path);
+//        for (int i=0; i< angles.length; i++) {
+////            可以实现清除所画内容
+////            gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
+//
+//            //深度与角度通过路径点计算
+//            //深度就是往前的路径点索引
+////            landMark.setDepth(1);
+//            //
+//            landMark.setAngle(angles[i]);
+//
+//            landMark.draw(gl);
+//        }
 
         gl.glPopMatrix();
         long endTime = System.currentTimeMillis();
@@ -97,25 +103,22 @@ public class LandMarkActivity extends OpenGLESActivity {
         float[] angles = new float[path.size()];
         angles[0] = 0;
         if (path.size() >1) {
-            double[] first;
-            double[] second;
             for (int i=1; i<path.size(); i++) {
-                first = path.get(i-1);
-                second = path.get(i);
-//                Log.e("sss", "first:"+ first[0] + "  "+first[1]);
-//                Log.e("sss", "second:"+ second[0] + "  "+second[1]);
-
-                double x = second[0] - first[0];
-                double y = second[1] - first[1];
-                double an = Math.atan2(x, y) * 180 / Math.PI % 90;
-                angles[i] = Math.round(an);
-                Log.e("sss", "angle ==>"+an);
-//                Log.e("sss", "next ====");
+                angles[i] = getAngle3(path.get(i-1), path.get(i));
             }
 
         }
 
         return angles;
+    }
+
+    private float getAngle3(double[] first, double[] second) {
+
+        double an = CalculationLogLatDistance.GetAzimuth(first[0], first[1], second[0], second[1]);
+
+        float angle = (float) an;
+        Log.e("sss", "angle ==>"+angle);
+        return angle;
     }
 
 

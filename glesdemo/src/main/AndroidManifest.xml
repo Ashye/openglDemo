@@ -29,7 +29,8 @@
         <activity android:name=".demos.DrawArrowActivity" />
         <activity android:name=".demos.BitmapMatrixActivity" />
         <activity android:name=".demos.LandMarkActivity" />
-        <activity android:name=".demos.AntiSmoothActivity"></activity>
+        <activity android:name=".demos.AntiSmoothActivity" />
+        <activity android:name=".demos.Model.DrawRoutineActivity"></activity>
     </application>
 
 </manifest>

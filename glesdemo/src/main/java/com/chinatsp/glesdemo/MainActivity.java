@@ -22,6 +22,7 @@ import com.chinatsp.glesdemo.demos.DrawTriangleActivity;
 import com.chinatsp.glesdemo.demos.HelloActivity;
 import com.chinatsp.glesdemo.demos.LandMarkActivity;
 import com.chinatsp.glesdemo.demos.LightingActivity;
+import com.chinatsp.glesdemo.demos.Model.DrawRoutineActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
             "Bitmap Matrix",
             "LandMark",
-            "Anti smooth"
+            "Anti smooth",
+            "routine"
     };
     private void initListView() {
         lvDemos = (ListView)findViewById(R.id.lv_demos);
@@ -101,6 +103,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 12:
                         startActivity(new Intent(MainActivity.this, AntiSmoothActivity.class));
+                        break;
+                    case 13:
+                        startActivity(new Intent(MainActivity.this, DrawRoutineActivity.class));
                         break;
                 }
 
