@@ -57,7 +57,8 @@ public class Routine {
         vertexes = vbb.asFloatBuffer();
         vertexes.put(points);
         vertexes.position(0);
-        vertexSize = points.length /4;
+//        vertexSize = points.length /4;
+        vertexSize = path.size();
     }
 
 
@@ -102,8 +103,8 @@ public class Routine {
 
         Log.e("sss", "sss ====>"+ vertexSize);
 
-        gl.glVertexPointer(5, GL10.GL_FLOAT, 0, vertexes);
-        gl.glDrawArrays(GL10.GL_POINTS, 0, 5);
+        gl.glVertexPointer(4, GL10.GL_FLOAT, 0, vertexes);
+        gl.glDrawArrays(GL10.GL_POINTS, 0, vertexSize);
 
         gl.glFlush();
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);

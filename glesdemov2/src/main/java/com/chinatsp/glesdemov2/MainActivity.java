@@ -23,7 +23,6 @@ public class MainActivity extends OpenGLES20Activity {
     @Override
     protected GL20Renderer createRenderer() {
 //        return new TrangleRenderer();
-//        return new TrangleRenderer();
         return new RoutineRenderer();
     }
 }

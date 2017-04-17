@@ -8,7 +8,6 @@ import com.chinatsp.glesdemov2.base.GL20Renderer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.text.SimpleDateFormat;
 import java.util.Vector;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -163,7 +162,6 @@ public class RoutineRenderer extends GL20Renderer{
         }
     }
 
-    private int count = 0;
 
     @Override
     public void onDrawFrame(GL10 gl10) {
