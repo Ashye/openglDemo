@@ -18,8 +18,8 @@ public class Routine {
     private Vector<double[]> path;
 
 
-    {
-        path = new Vector<>();
+//    {
+//        path = new Vector<>();
 //        path.add(new double[] {113.95643f,22.53511f});
 //        path.add(new double[] {113.95656f,22.53504f});
 //        path.add(new double[] {113.95683f,22.53491f});
@@ -34,22 +34,28 @@ public class Routine {
 //        path.add(new double[] {113.954,22.53721});
 //        path.add(new double[] {113.95399,22.53752});
 //        path.add(new double[] {113.95398,22.53829});
-        path.add(new double[] {113.95397,22.53888});
-        path.add(new double[] {113.95395,22.53895});
-        path.add(new double[] {113.95396,22.53938});
-    }
+//        path.add(new double[] {113.95397,22.53888});
+//        path.add(new double[] {113.95395,22.53895});
+//        path.add(new double[] {113.95396,22.53938});
+//    }
 
     private FloatBuffer vertexes;
     private int vertexSize = 0;
 
+
+
+    public Routine(Vector<double[]> path) {
+        setPath(path);
+    }
+
     public Routine() {
-        setPath(null);
+        setPath(path);
     }
 
 
     private void setPath(final Vector<double[]> route) {
         // TODO: 2017/4/14 for test
-//        path = route;
+        path = route;
         float[] points = routeMapToCoordinates(path);
 
         ByteBuffer vbb = ByteBuffer.allocateDirect(points.length * 4);
@@ -65,25 +71,33 @@ public class Routine {
     private float[] routeMapToCoordinates(final Vector<double[]> route) {
 //        float[] points = new float[route.size() * 4];
 
+        float[] indices = new float[path.size() * 3];
+        int idx = 0;
+        double[] origin = path.get(0);
+        for (double[] point : path) {
+            indices[idx++] = (float) (point[0] - origin[0]) * 10000;
+            indices[idx++] = (float) (point[1] - origin[1]) * 10000;
+            indices[idx++] = 0f;
+        }
 
-        float[] points = {
-            0,0,0,1,
-                1,1,1,1,
-                1.5f,1.5f,1.5f,1f,
-                2,2,2,1,
-                3,3,3,1,
-        };
+//        float[] points = {
+//            0,0,0,1,
+//                1,1,1,1,
+//                1.5f,1.5f,1.5f,1f,
+//                2,2,2,1,
+//                3,3,3,1,
+//        };
 
-        printArray(points);
-        return points;
+        printArray(indices, 3);
+        return indices;
     }
 
-    private void printArray(float[] data) {
+    private void printArray(float[] data, int unitSize) {
         System.out.println("print array:");
 
         for (int i=0; i< data.length; i++) {
             System.out.print(" "+ data[i]);
-            if ((i + 1) % 4 == 0) {
+            if ((i + 1) % unitSize == 0) {
                 System.out.println();
             }
         }
@@ -95,7 +109,7 @@ public class Routine {
     public void draw(GL10 gl) {
 
         gl.glColor4f(1f, 0f,0f,1f);
-        gl.glPointSize(20f);
+        gl.glPointSize(10f);
 
 
 
@@ -103,7 +117,7 @@ public class Routine {
 
         Log.e("sss", "sss ====>"+ vertexSize);
 
-        gl.glVertexPointer(4, GL10.GL_FLOAT, 0, vertexes);
+        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexes);
         gl.glDrawArrays(GL10.GL_POINTS, 0, vertexSize);
 
         gl.glFlush();

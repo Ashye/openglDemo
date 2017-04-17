@@ -14,10 +14,11 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * Created by zhangwei on 2017/4/14.
+ * Created by zhangwei on 2017/4/17.
  */
 
-public class RoutineRenderer extends GL20Renderer{
+public class LandMark extends GL20Renderer {
+
 
     private Vector<double[]> path;
 
@@ -53,7 +54,7 @@ public class RoutineRenderer extends GL20Renderer{
     }
 
 
-    private FloatBuffer triangleVB;
+    private FloatBuffer landMarkFB;
 
     private int mProgram;
     private int maPositionHandle;
@@ -83,9 +84,9 @@ public class RoutineRenderer extends GL20Renderer{
                 // (# of coordinate values * 4 bytes per float)
                 triangleCoords.length * 4);
         vbb.order(ByteOrder.nativeOrder());// use the device hardware's native byte order
-        triangleVB = vbb.asFloatBuffer();  // create a floating point buffer from the ByteBuffer
-        triangleVB.put(triangleCoords);    // add the coordinates to the FloatBuffer
-        triangleVB.position(0);            // set the buffer to read the first coordinate
+        landMarkFB = vbb.asFloatBuffer();  // create a floating point buffer from the ByteBuffer
+        landMarkFB.put(triangleCoords);    // add the coordinates to the FloatBuffer
+        landMarkFB.position(0);            // set the buffer to read the first coordinate
     }
 
     private float[] getVertexes() {
@@ -111,7 +112,6 @@ public class RoutineRenderer extends GL20Renderer{
 
                     // the matrix must be included as a modifier of gl_Position
                     " gl_Position = uMVPMatrix * vPosition; \n" +
-                    " gl_PointSize = 40.0f; \n" +
 
                     "}  \n";
 
@@ -189,7 +189,7 @@ public class RoutineRenderer extends GL20Renderer{
         GLES20.glUseProgram(mProgram);
 
         // Prepare the triangle data
-        GLES20.glVertexAttribPointer(maPositionHandle, 3, GLES20.GL_FLOAT, false, 0, triangleVB);
+        GLES20.glVertexAttribPointer(maPositionHandle, 3, GLES20.GL_FLOAT, false, 0, landMarkFB);
         GLES20.glEnableVertexAttribArray(maPositionHandle);
 
 
@@ -207,8 +207,7 @@ public class RoutineRenderer extends GL20Renderer{
 
 
         // Draw the triangle
-        GLES20.glLineWidth(200f);
-//        GLES20.
+        GLES20.glLineWidth(50f);
         GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, path.size());
 
 
