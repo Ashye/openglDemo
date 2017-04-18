@@ -44,12 +44,17 @@ public class Routine {
 
 
 
+    private LandMark landMark;
+
+
     public Routine(Vector<double[]> path) {
         setPath(path);
+
+        landMark = new LandMark(1024, 768);
     }
 
     public Routine() {
-        setPath(path);
+        this(null);
     }
 
 
@@ -71,13 +76,13 @@ public class Routine {
     private float[] routeMapToCoordinates(final Vector<double[]> route) {
 //        float[] points = new float[route.size() * 4];
 
-        float[] indices = new float[path.size() * 3];
+        float[] points = new float[path.size() * 3];
         int idx = 0;
         double[] origin = path.get(0);
         for (double[] point : path) {
-            indices[idx++] = (float) (point[0] - origin[0]) * 10000;
-            indices[idx++] = (float) (point[1] - origin[1]) * 10000;
-            indices[idx++] = 0f;
+            points[idx++] = (float) (point[0] - origin[0]) * 10000;
+            points[idx++] = (float) (point[1] - origin[1]) * 10000;
+            points[idx++] = 0f;
         }
 
 //        float[] points = {
@@ -88,8 +93,8 @@ public class Routine {
 //                3,3,3,1,
 //        };
 
-        printArray(indices, 3);
-        return indices;
+        printArray(points, 3);
+        return points;
     }
 
     private void printArray(float[] data, int unitSize) {

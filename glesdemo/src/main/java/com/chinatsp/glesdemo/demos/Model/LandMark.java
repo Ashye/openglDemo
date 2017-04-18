@@ -24,7 +24,11 @@ public class LandMark {
 
     //负值右转；正值左转
     private float angle = 0f;
+    private float angleStep = 0;
     private int depth = 1;
+
+    private final int markCount = 6;
+    private float scaleFacter = 0.8f;
 
     private int width;
     private int height;
@@ -98,7 +102,10 @@ public class LandMark {
 
 
     public void setAngle(float angle) {
-        this.angle = angle;
+        this.angle = angle * -1;
+        this.angleStep = this.angle / markCount;
+
+        Log.e("Ss", "turn "+this.angle);
     }
 
     public void setDepth(int depth) {
@@ -109,19 +116,7 @@ public class LandMark {
     }
 
 
-    public void draw(GL10 gl) {
-
-//        gl.glLineWidth(5);
-        if (angle != 0) {
-            gl.glRotatef(angle, 0, 1, 0);
-        }
-
-        //根据深度设置大小
-        for (int i=0; i< depth; i++) {
-            gl.glTranslatef(0, 0, -2f);
-            gl.glScalef(0.9f, 0.9f, 0.9f);
-        }
-
+    public void drawMark(GL10 gl) {
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 
         gl.glVertexPointer(4, GL10.GL_FLOAT, 0, vertexBuffer);
@@ -129,6 +124,26 @@ public class LandMark {
 
         gl.glFlush();
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+    }
+
+    public void draw(GL10 gl) {
+
+        int count = 1;
+
+        do {
+
+            drawMark(gl);
+
+            if (angleStep != 0) {
+                gl.glRotatef(angleStep, 0, 1, 0);
+            }
+            gl.glTranslatef(0, 0, -1.5f);
+            float sca = scaleFacter;
+            gl.glScalef(sca, sca, sca);
+
+
+            count ++;
+        } while (count <= markCount);
 
         saveBitmap(gl);
     }

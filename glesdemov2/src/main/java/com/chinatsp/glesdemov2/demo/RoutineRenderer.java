@@ -98,6 +98,8 @@ public class RoutineRenderer extends GL20Renderer{
             indices[idx++] = 0f;
         }
 
+        printArray(indices, 3);
+
         return indices;
     }
 
@@ -212,5 +214,19 @@ public class RoutineRenderer extends GL20Renderer{
         GLES20.glDrawArrays(GLES20.GL_LINE_STRIP, 0, path.size());
 
 
+    }
+
+
+    private void printArray(float[] data, int unitSize) {
+        System.out.println("print array:");
+
+        for (int i=0; i< data.length; i++) {
+            System.out.print(" "+ data[i]);
+            if ((i + 1) % unitSize == 0) {
+                System.out.println();
+            }
+        }
+
+        System.out.println();
     }
 }
