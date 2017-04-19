@@ -102,7 +102,7 @@ public class LandMark {
 
 
     public void setAngle(float angle) {
-        this.angle = angle * -1;
+        this.angle = angle;
         this.angleStep = this.angle / markCount;
 
 //        Log.e("Ss", "turn "+this.angle);
