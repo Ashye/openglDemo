@@ -105,7 +105,7 @@ public class LandMark {
         this.angle = angle * -1;
         this.angleStep = this.angle / markCount;
 
-        Log.e("Ss", "turn "+this.angle);
+//        Log.e("Ss", "turn "+this.angle);
     }
 
     public void setDepth(int depth) {
@@ -145,7 +145,7 @@ public class LandMark {
             count ++;
         } while (count <= markCount);
 
-        saveBitmap(gl);
+//        saveBitmap(gl);
     }
 
     private void saveBitmap(GL10 gl) {

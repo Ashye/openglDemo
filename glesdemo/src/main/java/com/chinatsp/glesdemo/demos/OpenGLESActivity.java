@@ -4,7 +4,6 @@ package com.chinatsp.glesdemo.demos;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.view.WindowManager;
 
 import com.chinatsp.glesdemo.OpenGLRenderer;
@@ -58,7 +57,7 @@ public abstract class OpenGLESActivity extends AppCompatActivity implements Open
 //            }
 //        });
         mGlSurfaceView.setRenderer(new OpenGLRenderer(this));
-        mGlSurfaceView.setVisibility(View.INVISIBLE);
+//        mGlSurfaceView.setVisibility(View.INVISIBLE);
         mGlSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         setContentView(mGlSurfaceView);
     }

@@ -120,8 +120,6 @@ public class Routine {
 
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 
-        Log.e("sss", "sss ====>"+ vertexSize);
-
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexes);
         gl.glDrawArrays(GL10.GL_POINTS, 0, vertexSize);
 

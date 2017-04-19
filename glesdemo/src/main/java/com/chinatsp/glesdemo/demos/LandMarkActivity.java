@@ -17,44 +17,102 @@ public class LandMarkActivity extends OpenGLESActivity {
     private Vector<double[]> path = new Vector<>();
 
     {
-        path.add(new double[] {113.95643f,22.53511f});
-        path.add(new double[] {113.95656f,22.53504f});
-        path.add(new double[] {113.95683f,22.53491f});
-        path.add(new double[] {113.95687f,22.53498f});
-        path.add(new double[] {113.95675,22.53504});
-        path.add(new double[] {113.9565f,22.53516f});
-        path.add(new double[] {113.95566,22.53557});
-        path.add(new double[] {113.95559,22.5356});
-        path.add(new double[] {113.95403,22.5364});
-        path.add(new double[] {113.95402,22.53665});
-        path.add(new double[] {113.954,22.53713});
-        path.add(new double[] {113.954,22.53721});
-        path.add(new double[] {113.95399,22.53752});
-        path.add(new double[] {113.95398,22.53829});
-        path.add(new double[] {113.95397,22.53888});
-        path.add(new double[] {113.95395,22.53895});
-        path.add(new double[] {113.95396,22.53938});
-        path.add(new double[] {113.95394,22.53987});
-        path.add(new double[] {113.95393,22.54012});
-        path.add(new double[] {113.95386,22.54038});
-        path.add(new double[] {113.95329,22.54035});
-        path.add(new double[] {113.95268,22.54032});
-        path.add(new double[] {113.95241,22.54031});
-        path.add(new double[] {113.95171,22.54028});
-        path.add(new double[] {113.95131,22.54026});
-        path.add(new double[] {113.94914,22.54016});
+
+        /**
+         * 平面路径：下下下右右上上上上上上上左左左左左左左
+         */
+        path.add(new double[] {113.95398, 22.53655});
+        path.add(new double[] {113.95399, 22.5364});
+        path.add(new double[] {113.95399, 22.5364});
+        path.add(new double[] {113.95399, 22.53632});
+        path.add(new double[] {113.95399, 22.53632});
+        path.add(new double[] {113.95403, 22.53631});
+        path.add(new double[] {113.95403, 22.53631});
+        path.add(new double[] {113.95403, 22.5364});
+        path.add(new double[] {113.95403, 22.5364});
+        path.add(new double[] {113.95402, 22.53665});
+        path.add(new double[] {113.95402, 22.53665});
+        path.add(new double[] {113.95401, 22.53684});
+        path.add(new double[] {113.95401, 22.53684});
+        path.add(new double[] {113.954, 22.53713});
+        path.add(new double[] {113.954, 22.53713});
+        path.add(new double[] {113.954, 22.53721});
+        path.add(new double[] {113.954, 22.53721});
+        path.add(new double[] {113.95399, 22.53752});
+        path.add(new double[] {113.95399, 22.53752});
+        path.add(new double[] {113.95398, 22.53776});
+        path.add(new double[] {113.95398, 22.53776});
+        path.add(new double[] {113.95398, 22.53829});
+        path.add(new double[] {113.95398, 22.53829});
+        path.add(new double[] {113.95397, 22.53888});
+        path.add(new double[] {113.95397, 22.53888});
+        path.add(new double[] {113.95395, 22.53895});
+        path.add(new double[] {113.95395, 22.53895});
+        path.add(new double[] {113.95396, 22.5392});
+        path.add(new double[] {113.95396, 22.5392});
+        path.add(new double[] {113.95396, 22.53938});
+        path.add(new double[] {113.95396, 22.53938});
+        path.add(new double[] {113.95395, 22.53965});
+        path.add(new double[] {113.95395, 22.53965});
+        path.add(new double[] {113.95394, 22.53987});
+        path.add(new double[] {113.95394, 22.53987});
+        path.add(new double[] {113.95393, 22.54012});
+        path.add(new double[] {113.95393, 22.54012});
+        path.add(new double[] {113.95394, 22.54038});
+        path.add(new double[] {113.95394, 22.54038});
+        path.add(new double[] {113.95386, 22.54038});
+        path.add(new double[] {113.95386, 22.54038});
+        path.add(new double[] {113.95357, 22.54036});
+        path.add(new double[] {113.95357, 22.54036});
+        path.add(new double[] {113.95329, 22.54035});
+        path.add(new double[] {113.95329, 22.54035});
+        path.add(new double[] {113.95295, 22.54034});
+        path.add(new double[] {113.95295, 22.54034});
+        path.add(new double[] {113.95225, 22.54031});
+        path.add(new double[] {113.95225, 22.54031});
+        path.add(new double[] {113.95198, 22.5403});
+        path.add(new double[] {113.95198, 22.5403});
+        path.add(new double[] {113.95171, 22.54028});
+        path.add(new double[] {113.95171, 22.54028});
+        path.add(new double[] {113.95131, 22.54026});
+        path.add(new double[] {113.95131, 22.54026});
+        path.add(new double[] {113.94914, 22.54016});
+        path.add(new double[] {113.94914, 22.54016});
+        path.add(new double[] {113.94805, 22.54012});
+        path.add(new double[] {113.94805, 22.54012});
+        path.add(new double[] {113.94786, 22.54009});
+        path.add(new double[] {113.94786, 22.54009});
+        path.add(new double[] {113.94742, 22.54008});
+        path.add(new double[] {113.94742, 22.54008});
+        path.add(new double[] {113.94695, 22.54006});
+        path.add(new double[] {113.94695, 22.54006});
+        path.add(new double[] {113.9463, 22.54003});
+        path.add(new double[] {113.9463, 22.54003});
+        path.add(new double[] {113.94578, 22.54001});
+        path.add(new double[] {113.94578, 22.54001});
+        path.add(new double[] {113.94552, 22.54});
+        path.add(new double[] {113.94552, 22.54});
+        path.add(new double[] {113.94532, 22.53999});
+        path.add(new double[] {113.94532, 22.53999});
+        path.add(new double[] {113.94465, 22.53995});
+        path.add(new double[] {113.94465, 22.53995});
+        path.add(new double[] {113.94331, 22.53989});
+        path.add(new double[] {113.94331, 22.53989});
+        path.add(new double[] {113.94285, 22.53996});
+
+
+        /**
+         *
+         */
+
+
     }
 
 
     private Routine routine;
 
     private LandMark landMark;
-    private final int markCount = 8;
 
-    /**
-     * 车头航向
-     */
-    private int directionOfCar = 100;
 
 
     @Override
@@ -64,24 +122,24 @@ public class LandMarkActivity extends OpenGLESActivity {
         Point point = new Point();
         getWindow().getWindowManager().getDefaultDisplay().getSize(point);
 
+        //去掉重复的点，很重要！不然计算相对角时有问题
+        filterDuplicatedPoints();
+
         routine = new Routine(path);
         landMark = new LandMark(point.x, point.y);
 
-//        float[] points = getVertexes();
-//
-//        printArray(points, 3);
 
 
-//        mGlSurfaceView.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                mGlSurfaceView.requestRender();
-//
-//                if (currPosition < path.size() - 2) {
-//                    mGlSurfaceView.postDelayed(this, 1000);
-//                }
-//            }
-//        }, 1000);
+        mGlSurfaceView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mGlSurfaceView.requestRender();
+
+                if (currPosition < path.size() - 2) {
+                    mGlSurfaceView.postDelayed(this, 1000);
+                }
+            }
+        }, 1000);
 
     }
 
@@ -107,12 +165,14 @@ public class LandMarkActivity extends OpenGLESActivity {
         antiSmooth(gl);
 
 
-//        angletwoTest();
-//        getAngle();
+//        printAllPointAngle();
+//        printPointAngle(2);
 
+//        filterDuplicatedPoints();
 //        printAllPointAngle();
 
-        landMark.setAngle(angletwoTest());
+
+        landMark.setAngle(calculateTurnAngle());
         landMark.draw(gl);
 //        routine.draw(gl);
 
@@ -123,7 +183,7 @@ public class LandMarkActivity extends OpenGLESActivity {
         currPosition ++;
     }
 
-    private int currPosition = 3;
+    private int currPosition = 0;
 //    private float getAngle() {
 //        if (currPosition > path.size() - 3) {
 //            return 0f;
@@ -167,73 +227,69 @@ public class LandMarkActivity extends OpenGLESActivity {
 //        return (float) angle;
 //    }
 
-    private int angleStandard = 0;
-    private int angletwoTest() {
+    private int getAngleBetweenPoints(double[] first, double[] second) {
+        int angle = Util.LngLatToOrient(first[0], first[1], second[0], second[1]);
+//        Log.e("sssss ", "position:"+currPosition+"origin angle:"+angle);
+        return Util.ConvertAngleIn0_180(angle);
+//        return angle;
+    }
 
-        if (currPosition > path.size() -2) {
+    private int calculateTurnAngle() {
+        //到路径起点或者终点时，无转弯角度
+        if (currPosition > path.size() - 2 || currPosition == 0) {
             return 0;
         }
 
-        // TODO: 2017/4/18 for test
-        if (currPosition < 1) {
-            angleStandard = 0;
-        }else {
-            angleStandard = getAngleBetweenPoints(path.get(currPosition-1), path.get(currPosition));
-        }
-        int andnow = getAngleBetweenPoints(path.get(currPosition), path.get(currPosition+1));
+        //根据当前点，前点，后点，计算转向角度
+        int angleNow = getAngleBetweenPoints(path.get(currPosition -1), path.get(currPosition));
+        int angleComming = getAngleBetweenPoints(path.get(currPosition), path.get(currPosition+1));
 
-//        double[] first = path.get(currPosition);
-//        double[] second = path.get(currPosition+1);
-//        int angleOffset = getAngleBetweenPoints(first, second);
-        int angle = andnow - angleStandard;
-//
-//        if (currPosition == 0) {
-//            angleStandard = angleOffset;
-//        }else {
-//            angle = angleOffset - angleStandard;
-//            angleStandard = angleOffset;
-//        }
-//        Log.e("sssss ", "======"+currPosition+"=======: "+angle);
-//        Log.e("ss", String.format("s: %d, next: %d, angle:%d", angleStandard, andnow, angle));
-        return angle;
-    }
+        Log.e("sssss ", "======"+currPosition+"======: now=======>"+angleNow + " comming======>"+ angleComming);
 
-    private int getAngleBetweenPoints(double[] first, double[] second) {
-        int angle = Util.LngLatToOrient(first[0], first[1], second[0], second[1]);
-        return Util.ConvertAngleIn0_180(angle);
+        int turnAngle = angleComming - angleNow;
+
+        Log.e("sssss ", "turn angle=====>"+(turnAngle));
+        Log.e("sssss ", "-------------------------------");
+
+        return turnAngle;
     }
 
     private void printAllPointAngle() {
-
-        int angle = getAngleBetweenPoints(path.get(currPosition), path.get(currPosition +1));
-        Log.e("sssss ", "======"+currPosition+"=======: "+ angleStandard +"   "+angle + "  offsetAngle: "+(angle - angleStandard));
-        angleStandard = angle;
-
+        calculateTurnAngle();
     }
 
-//    private float[] getVertexes() {
-//        float[] indices = new float[path.size() * 3];
-//        int idx = 0;
-//        double[] origin = path.get(0);
-//        for (double[] point : path) {
-//            indices[idx++] = (float) (point[0] - origin[0]) * 10000;
-//            indices[idx++] = (float) (point[1] - origin[1]) * 10000;
-//            indices[idx++] = 0f;
-//        }
-//
-//        return indices;
-//    }
-//
-//    private void printArray(float[] data, int unitSize) {
-//        System.out.println("print array:");
-//
-//        for (int i=0; i< data.length; i++) {
-//            System.out.print(" "+ data[i]);
-//            if ((i + 1) % unitSize == 0) {
-//                System.out.println();
-//            }
-//        }
-//
-//        System.out.println();
-//    }
+    private void printPointAngle(int currPosition) {
+        int angleNow = 0;
+        if (currPosition ==0) {
+            angleNow = 0;
+        }else {
+            angleNow = getAngleBetweenPoints(path.get(currPosition - 1), path.get(currPosition));
+        }
+        Log.e("sssss ", "point"+currPosition+"=====>"+(angleNow));
+    }
+
+    private void filterDuplicatedPoints() {
+        printAllPoints();
+        double[] first;
+        double[] second;
+
+        for (int i=1; i<path.size(); i++) {
+            first = path.get(i-1);
+            second = path.get(i);
+            if (Math.abs(first[0] - second[0]) < Double.MIN_VALUE
+                    && Math.abs(first[1] - second[1]) < Double.MIN_VALUE) {
+                path.remove(i);
+            }
+        }
+        Log.e("sssss ", "--------------------------------------------------------------------------");
+        printAllPoints();
+    }
+
+    private void printAllPoints() {
+        for (double[] point :
+                path) {
+            System.out.println(String.format("%f, %f", point[0], point[1]));
+        }
+        System.out.println(String.format("size: %d", path.size()));
+    }
 }

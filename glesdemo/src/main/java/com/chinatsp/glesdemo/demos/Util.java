@@ -57,14 +57,14 @@ public class Util {
     }
 
 
-    public static double DTOR(double Degree)	// 角度转化成弧度
-    {
-        return Degree * Math.PI / 180.0;
-    }
-    public static double RTOD(double Radian)	// 弧度转化成角度
-    {
-        return Radian * 180.0 / Math.PI;
-    }
+//    public static double DTOR(double Degree)	// 角度转化成弧度
+//    {
+//        return Degree * Math.PI / 180.0;
+//    }
+//    public static double RTOD(double Radian)	// 弧度转化成角度
+//    {
+//        return Radian * 180.0 / Math.PI;
+//    }
 
     public static int ConvertAngleIn0_180(int InAngle)
     {
@@ -87,11 +87,11 @@ public class Util {
         return InAngle;	//[0,180]
     }
 
-    public static int LngLatToOrient(	double dBeginLong,double dBeginLat,double dEndLong,double dEndLat/*,double& dDist*/) {
+    public static int LngLatToOrient(double dBeginLong,double dBeginLat,double dEndLong,double dEndLat/*,double& dDist*/) {
         // 计算航向(方位)
-        double DMP = 7915.70447 * (Math.log10(Math.tan(DTOR(45 + dEndLat / 2.0))) - Math.log10(Math.tan(DTOR(45 + dBeginLat / 2.0))));    // 计算纬度渐长率差,单位:分
+        double DMP = 7915.70447 * (Math.log10(Math.tan(Math.toRadians(45 + dEndLat / 2.0))) - Math.log10(Math.tan(Math.toRadians(45 + dBeginLat / 2.0))));    // 计算纬度渐长率差,单位:分
         double tmpdOrient = Math.atan((dEndLong - dBeginLong) * 60 / DMP);  //dEndLong-dBeginLong单位是度,而DMP单位是分,故*60
-        tmpdOrient = RTOD(Math.abs(tmpdOrient));
+        tmpdOrient = Math.toDegrees(Math.abs(tmpdOrient));
         int dOrient = (int) tmpdOrient;
 
         //  由于tmpdOrient的角度值在[0，90]之间，应讨论
