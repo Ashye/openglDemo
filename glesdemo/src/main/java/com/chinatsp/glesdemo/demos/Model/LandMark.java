@@ -145,13 +145,13 @@ public class LandMark {
             count ++;
         } while (count <= markCount);
 
-//        saveBitmap(gl);
+        saveBitmap(gl);
     }
 
     private void saveBitmap(GL10 gl) {
         imageBuffer.position(0);
 
-        gl.glReadPixels(width/2 - imageWidth/2, height /2, imageWidth, imageHeight, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, imageBuffer);
+        gl.glReadPixels(width/2 - imageWidth/2, height /2 - imageHeight/3, imageWidth, imageHeight, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, imageBuffer);
 
         imageBuffer.position(0);
         int pix[] = new int[imageWidth*imageHeight];
@@ -187,15 +187,15 @@ public class LandMark {
 //        matrix.setScale(0.3f, .3f);
 //        bmp = Bitmap.createBitmap(bmp, 0,0,bmp.getWidth(), bmp.getHeight(), matrix, true);
 
-        bmp = Bitmap.createScaledBitmap(bmp, 100, 75, true);
+//        bmp = Bitmap.createScaledBitmap(bmp, 100, 75, true);
 
         FileOutputStream fos = null;
         try {
-            String name = Environment.getExternalStorageDirectory()+"/opengl_.png";
+            String name = Environment.getExternalStorageDirectory()+"/opengl_.jpg";
 
             Log.e("sss", "sssssssssssss ->" + name);
             fos = new FileOutputStream(name);
-            bmp.compress(Bitmap.CompressFormat.PNG, 30, fos);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
             fos.flush();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
