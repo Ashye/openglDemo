@@ -427,8 +427,8 @@ public class LandMarkActivity extends OpenGLESActivity {
     private int getAngleBetweenPoints(double[] first, double[] second) {
         int angle = Util.LngLatToOrient(first[0], first[1], second[0], second[1]);
 //        Log.e("sssss ", "position:"+currPosition+"origin angle:"+angle);
-        return Util.ConvertAngleIn0_180(angle);
-//        return angle;
+//        return Util.ConvertAngleIn0_180(angle);
+        return angle;
     }
 
     private int calculateTurnAngle() {
