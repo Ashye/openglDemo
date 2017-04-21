@@ -45,7 +45,7 @@ public class GL20Renderer implements GLSurfaceView.Renderer {
                     "  gl_FragColor = vColor;" +
                     "}";
 
-    public static int loadShader(int type, String shaderCode){
+    protected static int loadShader(int type, String shaderCode){
 
         // 创建一个vertex shader类型(GLES20.GL_VERTEX_SHADER)
         // 或fragment shader类型(GLES20.GL_FRAGMENT_SHADER)
@@ -57,6 +57,7 @@ public class GL20Renderer implements GLSurfaceView.Renderer {
 
         return shader;
     }
+
 
 
 }

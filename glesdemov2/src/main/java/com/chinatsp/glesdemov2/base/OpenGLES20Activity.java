@@ -31,5 +31,5 @@ public abstract class OpenGLES20Activity extends AppCompatActivity {
         glSurfaceView.onResume();
     }
 
-    protected abstract GL20Renderer createRenderer();
+    protected abstract GL20Renderer2D createRenderer();
 }
