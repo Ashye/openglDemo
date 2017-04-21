@@ -80,7 +80,7 @@ public class GL20Renderer2D implements GLSurfaceView.Renderer {
         GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, mMVPMatrix, 0);
 
 
-        GLES20.glLineWidth(20f);
+//        GLES20.glLineWidth(10f);
 
         //画内容
 
