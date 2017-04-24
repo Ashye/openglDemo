@@ -25,10 +25,12 @@ public class LandMark {
     //负值右转；正值左转
     private float angle = 0f;
     private float angleStep = 0;
-    private int depth = 1;
+    private float depth = 1.2f;
 
-    private final int markCount = 6;
-    private float scaleFacter = 0.8f;
+    private double distanceToTurn = 0;
+
+    private final int markCount = 20;
+    private float scaleFacter = 0.9f;
 
     private int width;
     private int height;
@@ -104,11 +106,18 @@ public class LandMark {
     public void setAngle(float angle) {
         this.angle = angle;
         this.angleStep = this.angle / markCount;
-
-//        Log.e("Ss", "turn "+this.angle);
     }
 
-    public void setDepth(int depth) {
+    public void setTurnDirection(double[] turnDirection) {
+        if (turnDirection[0] > 100) {
+            setAngle(0);
+        }else {
+            this.distanceToTurn = turnDirection[0];
+            setAngle((float) turnDirection[1]);
+        }
+    }
+
+    public void setDepth(float depth) {
         this.depth = depth;
         if (this.depth <1) {
             this.depth = 1;
@@ -129,6 +138,21 @@ public class LandMark {
     public void draw(GL10 gl) {
 
         int count = 1;
+        float sca = scaleFacter;
+
+        if (distanceToTurn > 10) {
+
+            int lineMark = (int) (distanceToTurn / 10);
+            do {
+                drawMark(gl);
+                gl.glTranslatef(0, 0, -depth);
+                gl.glScalef(sca, sca, sca);
+
+                lineMark --;
+            } while (lineMark >0);
+
+            count += lineMark;
+        }
 
         do {
 
@@ -137,15 +161,14 @@ public class LandMark {
             if (angleStep != 0) {
                 gl.glRotatef(angleStep, 0, 1, 0);
             }
-            gl.glTranslatef(0, 0, -1.5f);
-            float sca = scaleFacter;
+            gl.glTranslatef(0, 0, -depth);
             gl.glScalef(sca, sca, sca);
 
 
             count ++;
         } while (count <= markCount);
 
-        saveBitmap(gl);
+//        saveBitmap(gl);
     }
 
     private void saveBitmap(GL10 gl) {
