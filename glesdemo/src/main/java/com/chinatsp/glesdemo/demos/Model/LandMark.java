@@ -23,13 +23,8 @@ import javax.microedition.khronos.opengles.GL10;
 public class LandMark {
 
     //负值右转；正值左转
-    private float angle = 0f;
-    private float angleStep = 0;
-    private float depth = 1.2f;
 
-    private double distanceToTurn = 0;
-
-    private final int markCount = 20;
+    private float depth = 1.5f;
     private float scaleFacter = 0.9f;
 
     private int width;
@@ -38,22 +33,9 @@ public class LandMark {
     private int imageHeight = 100;
 
 
-//    private float xOffset = 2f;
-//    private float ySize = 1f;
-//    private float zOffset = 1f;
-//
-//    private float[] vertexUnit = new float[] {
-//            0,0,0,1,
-//            -xOffset,-ySize,0,1,
-//            -xOffset,-ySize,zOffset,1,
-//            0,0,zOffset,1,
-//            xOffset,-ySize,0,1,
-//            xOffset, -ySize,zOffset,1,
-//    };
-
-    private float xOffset = 2f;
+    private float xOffset = 1.5f;
     private final float zWidth = 0.8f;
-    private float zOffset = 1.3f;
+    private float zOffset = 2f;
 
 
     private float[] vertexUnit = new float[] {
@@ -103,28 +85,6 @@ public class LandMark {
     }
 
 
-    public void setAngle(float angle) {
-        this.angle = angle;
-        this.angleStep = this.angle / markCount;
-    }
-
-    public void setTurnDirection(double[] turnDirection) {
-        if (turnDirection[0] > 100) {
-            setAngle(0);
-        }else {
-            this.distanceToTurn = turnDirection[0];
-            setAngle((float) turnDirection[1]);
-        }
-    }
-
-    public void setDepth(float depth) {
-        this.depth = depth;
-        if (this.depth <1) {
-            this.depth = 1;
-        }
-    }
-
-
     public void drawMark(GL10 gl) {
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 
@@ -133,42 +93,53 @@ public class LandMark {
 
         gl.glFlush();
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+
+        drawMarkCount++;
     }
 
-    public void draw(GL10 gl) {
 
-        int count = 1;
-        float sca = scaleFacter;
+    private final static int markCountMax = 15;
+    private int drawMarkCount = 0;
 
-        if (distanceToTurn > 10) {
-
-            int lineMark = (int) (distanceToTurn / 10);
-            do {
-                drawMark(gl);
-                gl.glTranslatef(0, 0, -depth);
-                gl.glScalef(sca, sca, sca);
-
-                lineMark --;
-            } while (lineMark >0);
-
-            count += lineMark;
+    public void drawAngleWithDistance(GL10 gl, double distance, int angle) {
+        drawMarkCount = 0;
+        if (angle !=0 && distance > 50) {
+            int cnt = (int)(distance / 50);
+            drawAngle(gl, 0, cnt);
         }
 
-        do {
+        drawAngle(gl, angle, markCountMax);
+    }
 
-            drawMark(gl);
+    private void drawAngle(GL10 gl, int angle, float drawCount) {
 
-            if (angleStep != 0) {
-                gl.glRotatef(angleStep, 0, 1, 0);
+        //避免角度太大
+        if (angle > 90) {
+            angle = 90;
+        }else if (angle <-90) {
+            angle = -90;
+        }
+
+        float step = angle / drawCount;
+        float count = drawCount;
+        float sca = scaleFacter;
+        while (count >0) {
+
+            if (drawMarkCount >= markCountMax) {
+                break;
             }
+
             gl.glTranslatef(0, 0, -depth);
             gl.glScalef(sca, sca, sca);
 
+            if (step != 0) {
+                gl.glRotatef(step, 0, 1, 0);
+            }
 
-            count ++;
-        } while (count <= markCount);
+            drawMark(gl);
 
-//        saveBitmap(gl);
+            count--;
+        }
     }
 
     private void saveBitmap(GL10 gl) {

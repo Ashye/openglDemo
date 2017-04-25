@@ -37,7 +37,7 @@ public class OpenGLRenderer implements GLSurfaceView.Renderer {
         // Reset the projection matrix
         gl.glLoadIdentity();
         // Calculate the aspect ratio of the window
-        GLU.gluPerspective(gl, 45f, (float) width / (float) height, 0.1f, 100.0f);
+        GLU.gluPerspective(gl, 45f, (float) width / (float) height, 0.1f, 3000f);
         // Select the modelview matrix
         gl.glMatrixMode(GL10.GL_MODELVIEW);
         // Reset the modelview matrix
