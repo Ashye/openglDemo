@@ -1926,11 +1926,18 @@ public class LandMarkActivity extends OpenGLESActivity {
 //        landMark.setAngle(calculateTurnAngle(readyData.subList(currPosition, size)));
 //        landMark.draw(gl);
 
-        int angle = calculateComingTurn(readyData.subList(currPosition, readyData.size()));
-        Log.e("ssssss", "angle:"+angle);
 
-        landMark.drawAngleWithDistance(gl, 100d, angle);
+//        int angle = calculateComingTurn(readyData.subList(currPosition, readyData.size()));
+//        Log.e("ssssss", "angle:"+angle);
 
+//        landMark.drawAngleWithDistance(gl, 100d, angle);
+
+        List<Integer> angles = calculateComingTurn(readyData, 5);
+
+        for (int ang :
+                angles) {
+            Log.e("ssss", "angle:" + ang);
+        }
 
 
         gl.glPopMatrix();
@@ -2107,6 +2114,20 @@ public class LandMarkActivity extends OpenGLESActivity {
     }
 
 
+
+    private List<Integer> calculateComingTurn(List<double[]> path, int turnCount) {
+        List<Integer> result = new ArrayList<>(turnCount);
+        if (turnCount >0) {
+            int [] ret = {0, 2};
+            while (turnCount >0) {
+                ret = calculateComingTurns(path.subList(ret[1] -2, path.size()));
+                result.add(ret[0]);
+
+                turnCount--;
+            }
+        }
+        return result;
+    }
     /**
      * 根据过弯方向显示下一个弯
      */
@@ -2132,6 +2153,33 @@ public class LandMarkActivity extends OpenGLESActivity {
         return angle;
     }
 
+    /**
+     *
+     * @param path
+     * @return [angle, point length]
+     */
+    private int[] calculateComingTurns(List<double[]> path) {
+        int angle;
+        int size = path.size();
+        int length = 0;
+        if (size <3) {
+            angle = 0;
+        }else {
+            angle = calculateturnAngle(path.get(0), path.get(1), path.get(2));
+            for (length=1; length< size -2; length++) {
+                int tem = calculateturnAngle(path.get(length), path.get(length+1), path.get(length+2));
+                if (angle * tem >0) {
+                    //转向一致
+                    angle += tem;
+                }else {
+                    Log.e("sss", "use to point id: "+length +2);
+                    break;
+                }
+            }
+        }
+
+        return new int[]{angle, length +2/*本次角计算到 len +2 个点，但是下次计算时需要使用本次的后一个线段，故后两个点都需要在下次中计算*/};
+    }
 
 
     /**

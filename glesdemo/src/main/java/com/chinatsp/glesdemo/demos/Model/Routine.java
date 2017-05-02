@@ -55,7 +55,7 @@ public class Routine {
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexes);
-        gl.glDrawArrays(GL10.GL_POINTS, 0, vertexSize);
+//        gl.glDrawArrays(GL10.GL_POINTS, 0, vertexSize);
         gl.glDrawArrays(GL10.GL_LINE_STRIP, 0, vertexSize);
 
         gl.glFlush();

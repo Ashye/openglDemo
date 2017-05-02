@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.chinatsp.glesdemo.demos.Model.Routine;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -1161,24 +1162,24 @@ public class DrawRoutineActivity extends OpenGLESActivity {
     protected void onStart() {
         super.onStart();
 
-        filterDuplicatedPoints();
+        filterDuplicatedPoints(path);
 
         routine = new Routine();
 
 
-        mGlSurfaceView.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mGlSurfaceView.requestRender();
-
-                if (currPosition < path.size() - 10) {
-                    mGlSurfaceView.postDelayed(this, 500);
-                }
-            }
-        }, 500);
+//        mGlSurfaceView.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                mGlSurfaceView.requestRender();
+//
+//                if (currPosition < path.size() - 10) {
+//                    mGlSurfaceView.postDelayed(this, 500);
+//                }
+//            }
+//        }, 500);
     }
 
-    private int currPosition = 0;
+    private int currPosition = 9;
     private float[] points;
     @Override
     public void DrawScene(GL10 gl) {
@@ -1186,45 +1187,110 @@ public class DrawRoutineActivity extends OpenGLESActivity {
 
         gl.glLoadIdentity();
 
-        if (currPosition + 10 >= path.size()) {
-            return;
-        }
-        points = routeMapToCoordinates(path.subList(currPosition, currPosition +10));
+//        if (currPosition + 10 >= path.size()) {
+//            return;
+//        }
+        points = routeMapToCoordinates(path.subList(currPosition, currPosition +6));
+//        points = mapToCoordinatesInserted(path.subList(currPosition, currPosition +6));
+//        points = mapToCoordinatesInserted(path.subList(currPosition, currPosition +6));
+//        points = new float[] {
+//                0,0,0,
+//                0.1f,0.1f,0,
+//                0.2f,0.2f,0,
+//                0.3f,0.3f,0,
+//                0.4f,0.4f,0,
+//                0.5f,0.5f,0,
+//                0.6f,0.6f,0,
+//                0.7f,0.7f,0,
+//                0.8f,0.8f,0,
+//                0.9f,0.9f,0
+//
+//        };
+
+
         routine.setPath(points);
-        printArray(points, 3);
+//        printArray(points, 3);
         antiSmooth(gl);
 
-        float[] eyePosition = {points[0],points[1], 5f};
-//        float[] target = {points[3],points[4],0};
+        float[] eyePosition = {points[0],points[1], (float) EyeHeight};
+        float[] target = {points[3],points[4],0};
+//        float[] eyePosition = {points[3] - 0.2f,points[4]-0.2f, 0.2f};
 
-        double mo = Math.sqrt(points[3] * points[3] + points[4] * points[4]);
-        float[] target = {points[3], points[4], 0};
+        target = calculateEyeTargetPosition(target[0], target[1]);
 
-        Log.e("sss", String.format("look at:%f,%f,%f --->%f,%f,%f", eyePosition[0], eyePosition[1], eyePosition[2],
+//        double mo = Math.sqrt(points[3] * points[3] + points[4] * points[4]);
+//        float[] target = {points[currPosition+3], points[currPosition+4], 0};
+
+        Log.e("sss", String.format("look at:%f,%f,%f --->%f,%f,%f", eyePosition[0], eyePosition[1], target[2],
                 target[0], target[1],target[2]));
 
         GLU.gluLookAt(gl,
-                eyePosition[0],eyePosition[1], eyePosition[2],
+                eyePosition[0],eyePosition[1], target[2],
 //                (eyePosition[0] +target[0])/2,(eyePosition[1]+target[1])/2, 0,
                 target[0],target[1],0,
                 0,0,1);
 
 
         gl.glPushMatrix();
-//        gl.glTranslatef(-0.1f, -0.1f, 0);
+        gl.glTranslatef(-0.1f, -0.1f, 0);
         routine.draw(gl);
         gl.glPopMatrix();
-////
-//        gl.glPushMatrix();
-//        gl.glTranslatef(0.1f, 0.1f, 0);
-//        routine.draw(gl);
-//        gl.glPopMatrix();
+
+        gl.glPushMatrix();
+        gl.glTranslatef(0.1f, 0.1f, 0);
+        routine.draw(gl);
+        gl.glPopMatrix();
 
 
-        currPosition++;
+        currPosition+=3;
     }
 
-    private void moveEye() {
+
+    private static final double EyeDistance = 1f;
+    private static final double EyeHeight = 0.3f;
+
+    private float[] calculateEyePosition(double targetX, double targetY) {
+        return null;
+    }
+
+    //not working
+    private float[] calculateEyeTargetPosition(double targetX, double targetY) {
+        double x = 0;
+        double y = 0;
+
+        //targetX ==0
+        if (targetX == 0) {
+            //look at +y
+
+            x = 0;
+            y = Math.sqrt(Math.pow(EyeDistance, 2) - Math.pow(EyeHeight, 2));
+            y *= targetY/Math.abs(targetY);
+        }else if (targetY == 0) {
+            y = 0;
+            x = Math.sqrt(Math.pow(EyeDistance, 2) - Math.pow(EyeHeight, 2));
+            x *= targetX/Math.abs(targetX);
+
+        }else {
+            double aabb = Math.pow(targetX, 2) + Math.pow(targetY, 2);
+            double upValue = Math.pow(targetX, 2) * (Math.pow(EyeDistance, 2) - Math.pow(EyeHeight, 2));
+            x = Math.sqrt(upValue / aabb);
+            //确定 x 符号
+            x *= targetX/Math.abs(targetX);
+            y = x * targetY / targetX;
+        }
+
+        double oldDis = Math.sqrt(Math.pow(targetX, 2) + Math.pow(targetY, 2));
+        double newDis = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+
+//        float height = (float) (EyeHeight * (oldDis/newDis));
+        float height = (float) (oldDis / 3.14);
+
+        Log.e("sss", "next Point:" +targetX +", " +targetY + ", dis:"+oldDis);
+        Log.e("sss", "calu target:" +x +", " +y + ", dis:"+newDis);
+        Log.e("sss", "eyeDistance:" +Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(EyeHeight, 2)));
+
+
+        return new float[]{(float) x, (float) y, height};
     }
 
     private float[] routeMapToCoordinates(final List<double[]> route) {
@@ -1237,14 +1303,55 @@ public class DrawRoutineActivity extends OpenGLESActivity {
             points[idx++] = (float) (point[1] - origin[1]) * 10000;
             points[idx++] = 0f;
         }
-
 //        printArray(points, 3);
-
         return points;
     }
 
-    private void filterDuplicatedPoints() {
+    private float[] mapToCoordinatesInserted(final List<double[]> route) {
+        List<double[]> inserted = new ArrayList<>();
+
+        double[] first;
+        double[] second;
+        for (int idx = 0; idx < route.size() -2; idx ++) {
+            first = route.get(idx);
+            second = route.get(idx+1);
+            inserted.addAll(routePointInsert(first, second));
+        }
+        filterDuplicatedPoints(inserted);
+        return routeMapToCoordinates(inserted);
+    }
+
+    private List<double[]> routePointInsert(double[] first, double[] second) {
+        double distance = getDisanceBetweenPoints(first, second);
+
+        List<double[]> routePoints = new ArrayList<>();
+
+        if (distance > 5) {
+            int count = (int) Math.ceil(distance / 5);
+            double stepX = (second[0] - first[0]) / count;
+            double stepY = (second[1] - first[1]) / count;
+
+            for (int i=0; i <= count; i++) {
+                routePoints.add(new double[] {first[0] + stepX * i, first[1] + stepY * i});
+            }
+
+        }else {
+            routePoints.add(first);
+            routePoints.add(second);
+        }
+
+        return routePoints;
+    }
+
+    private double getDisanceBetweenPoints(double[] first, double[] second) {
+        double distance = Util.getrelativeDistance(first[0], first[1], second[0], second[1]);
+        return distance;
+    }
+
+    private void filterDuplicatedPoints(List<double[]> path) {
+
 //        printAllPoints();
+        List<double[]> deleted = new ArrayList<>();
         double[] first;
         double[] second;
 
@@ -1253,9 +1360,11 @@ public class DrawRoutineActivity extends OpenGLESActivity {
             second = path.get(i);
             if (Math.abs(first[0] - second[0]) < Double.MIN_VALUE
                     && Math.abs(first[1] - second[1]) < Double.MIN_VALUE) {
-                path.remove(i);
+//                path.remove(i);
+                deleted.add(path.get(i));
             }
         }
+        path.removeAll(deleted);
         Log.e("sssss ", "--------------------------------------------------------------------------");
 //        printAllPoints();
     }
