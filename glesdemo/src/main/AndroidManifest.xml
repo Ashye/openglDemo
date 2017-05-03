@@ -31,6 +31,8 @@
         <activity android:name=".demos.LandMarkActivity" />
         <activity android:name=".demos.AntiSmoothActivity" />
         <activity android:name=".demos.DrawRoutineActivity" />
+        <activity android:name=".demos.DrawFirstSightActivity" />
+        <activity android:name=".demos.DrawRoudActivity"></activity>
     </application>
 
 </manifest>

@@ -1167,19 +1167,20 @@ public class DrawRoutineActivity extends OpenGLESActivity {
         routine = new Routine();
 
 
-//        mGlSurfaceView.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                mGlSurfaceView.requestRender();
-//
-//                if (currPosition < path.size() - 10) {
-//                    mGlSurfaceView.postDelayed(this, 500);
-//                }
-//            }
-//        }, 500);
+        mGlSurfaceView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mGlSurfaceView.requestRender();
+
+                if (currPosition < path.size() - 10) {
+                    mGlSurfaceView.postDelayed(this, 500);
+                }
+            }
+        }, 500);
     }
 
-    private int currPosition = 9;
+//    private int currPosition = 9;
+    private int currPosition = 0;
     private float[] points;
     @Override
     public void DrawScene(GL10 gl) {

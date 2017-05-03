@@ -13,9 +13,11 @@ import com.chinatsp.glesdemo.demos.AntiSmoothActivity;
 import com.chinatsp.glesdemo.demos.BitmapMatrixActivity;
 import com.chinatsp.glesdemo.demos.CubeActivity;
 import com.chinatsp.glesdemo.demos.DrawArrowActivity;
+import com.chinatsp.glesdemo.demos.DrawFirstSightActivity;
 import com.chinatsp.glesdemo.demos.DrawIcosahedronActivity;
 import com.chinatsp.glesdemo.demos.DrawLineActivity;
 import com.chinatsp.glesdemo.demos.DrawPointActivity;
+import com.chinatsp.glesdemo.demos.DrawRoudActivity;
 import com.chinatsp.glesdemo.demos.DrawSolarSystemActivity;
 import com.chinatsp.glesdemo.demos.DrawSphereActivity;
 import com.chinatsp.glesdemo.demos.DrawTriangleActivity;
@@ -54,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
             "LandMark",
             "Anti smooth",
             "routine",
+            "First sight",
+            "draw route before",
     };
     private void initListView() {
         lvDemos = (ListView)findViewById(R.id.lv_demos);
@@ -106,6 +110,12 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 13:
                         startActivity(new Intent(MainActivity.this, DrawRoutineActivity.class));
+                        break;
+                    case 14:
+                        startActivity(new Intent(MainActivity.this, DrawFirstSightActivity.class));
+                        break;
+                    case 15:
+                        startActivity(new Intent(MainActivity.this, DrawRoudActivity.class));
                         break;
                 }
 

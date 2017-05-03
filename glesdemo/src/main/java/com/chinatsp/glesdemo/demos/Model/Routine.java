@@ -49,19 +49,58 @@ public class Routine {
     public void draw(GL10 gl) {
 
         gl.glColor4f(1f, 1f,1f,1f);
-        gl.glPointSize(50f);
-//        gl.glLineWidth(50f);
+        gl.glPointSize(20f);
+        gl.glLineWidth(5f);
 
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexes);
-//        gl.glDrawArrays(GL10.GL_POINTS, 0, vertexSize);
+        gl.glDrawArrays(GL10.GL_POINTS, 0, vertexSize);
         gl.glDrawArrays(GL10.GL_LINE_STRIP, 0, vertexSize);
 
         gl.glFlush();
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+
     }
 
+
+    private final float deltaX = 0.02f;
+    public void drawArrow(GL10 gl, float height) {
+
+        float[] points = {
+            deltaX, height - deltaX, 0,
+                0, height,0,
+                -deltaX,height - deltaX,0
+        };
+
+        gl.glPushMatrix();
+        gl.glRotatef(-45,0,0,1);
+        drawLines(gl, points);
+        gl.glPopMatrix();
+
+    }
+
+    private void drawLines(GL10 gl, float[] points) {
+
+        ByteBuffer vbb = ByteBuffer.allocateDirect(points.length * 4);
+        vbb.order(ByteOrder.nativeOrder());
+        FloatBuffer vertexes = vbb.asFloatBuffer();
+        vertexes.put(points);
+        vertexes.position(0);
+
+
+        gl.glColor4f(1f, 1f,1f,1f);
+//        gl.glPointSize(20f);
+        gl.glLineWidth(5f);
+
+        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+
+        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexes);
+        gl.glDrawArrays(GL10.GL_LINE_STRIP, 0, points.length/3);
+
+        gl.glFlush();
+        gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+    }
 
     public void drawl(GL10 gl, float j, float w, float z) {
 
