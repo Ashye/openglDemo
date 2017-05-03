@@ -1,5 +1,7 @@
 package com.chinatsp.glesdemo.demos.Model;
 
+import android.util.Log;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -19,6 +21,7 @@ public class DrawRoute {
 
     private List<double[]> pathPoints = new ArrayList<>();
 
+    private float[] points;
 
     public DrawRoute() {
 
@@ -26,7 +29,11 @@ public class DrawRoute {
 
     public void setPathPoints(final List<double[]> path) {
         pathPoints.addAll(path);
+        points = routeMapToCoordinates(pathPoints);
+        printArray(points, 3);
     }
+
+
 
     public void draw(GL10 gl) {
 
@@ -34,20 +41,46 @@ public class DrawRoute {
         gl.glPointSize(20f);
         gl.glLineWidth(5f);
 
+        gl.glTranslatef(0.3f, 0.3f, 0);
+
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 
+        gl.glPushMatrix();
         //draw line and arrow
-        for (int i=0; i< pathPoints.size() -1; i++) {
-            drawTerm(gl, pathPoints.get(i), pathPoints.get(i+1));
-        }
+        int idx = 3;
+//        while (idx < points.length -6) {
+            float firstX = points[idx++];
+            float firstY = points[idx++];
+            float firstZ = points[idx++];
+            float secondX = points[idx++];
+            float secondY = points[idx++];
+            float secondZ = points[idx++];
 
+            gl.glTranslatef(points[0] - points[3], points[1] - points[4], 0);
+            drawTwo(gl, firstX, firstY, firstZ, secondX, secondY, secondZ);
+//            idx -=3;
+//        }
+
+
+        gl.glPopMatrix();
         gl.glFlush();
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 
     }
 
 
-    private void drawTerm(GL10 gl, double[] origin, double[] seoncd) {
+
+    private void drawTwo(GL10 gl, float firstX, float firstY, float firstZ,
+                         float secondX, float secondY, float secondZ) {
+
+        Log.e("ss", String.format("%f,%f,%f  ->%f,%f,%f",firstX, firstY,firstZ, secondX, secondY, secondZ));
+
+        float dirtectionX = secondX - firstX;
+        float dirtectionY = secondY - firstY;
+
+
+
+        drawLines(gl, new float[]{0, 0, 0, dirtectionX, dirtectionY, 0});
 
     }
 
@@ -68,6 +101,7 @@ public class DrawRoute {
         gl.glPopMatrix();
 
     }
+
     private void drawLines(GL10 gl, float[] points) {
 
         ByteBuffer vbb = ByteBuffer.allocateDirect(points.length * 4);
@@ -84,9 +118,50 @@ public class DrawRoute {
 
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexes);
         gl.glDrawArrays(GL10.GL_LINE_STRIP, 0, points.length/3);
+        gl.glDrawArrays(GL10.GL_POINTS, 0, points.length/3);
 
         gl.glFlush();
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+    }
+
+    private double getEyeDirectionAngle(double x, double y) {
+
+//        Log.e("sss", "origin:"+points[0]+"  "  +points[1] + " x:"+x+ "  "+y);
+
+        double cos = (0.5 * x + 0.5 * y)
+                / Math.sqrt((x * x + y * y) * (0.5 * 0.5 + 0.5 * 0.5f));
+        double angle = Math.round(Math.toDegrees(Math.acos(cos)));
+
+//        double axb = target[0] * y - x * target[1];
+        double axb = x * 0.5 - 0.5 * y;
+        if (axb <0) {
+            angle *= -1;
+        }
+//        Log.e("sss", "index:"+ currPosition+"    angle:"+angle+ " cos:"+cos);
+        return angle;
+    }
+
+    private float[] routeMapToCoordinates(final List<double[]> route) {
+        float[] points = new float[route.size() * 3];
+
+        int idx = 0;
+        double[] origin = route.get(0);
+        for (double[] point : route) {
+            points[idx++] = (float) (point[0] - origin[0]) * 10000;
+            points[idx++] = (float) (point[1] - origin[1]) * 10000;
+            points[idx++] = 0f;
+        }
+//        printArray(points, 3);
+        return points;
+    }
+
+    private float[] routeMpatoCoordinates(double[] first, double[] second) {
+        float[] points = new float[]{
+                0,0,0,
+                (float) (second[0] - first[0]) * 10000, (float) (second[1] - first[1]) * 10000, 0
+        };
+//        printArray(points, 3);
+        return points;
     }
 
     private void printArray(float[] data, int unitSize) {

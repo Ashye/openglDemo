@@ -1212,9 +1212,9 @@ public class DrawRoudActivity extends OpenGLESActivity {
         gl.glTranslatef(0.3f,0.3f,0);
 
 
-        routine.drawArrow(gl, 0.1f);
-        routine.drawArrow(gl, 0.125f);
-        routine.drawArrow(gl, 0.15f);
+        routine.drawArrow(gl, 0.03f);
+        routine.drawArrow(gl, 0.0525f);
+//        routine.drawArrow(gl, 0.15f);
 
         gl.glRotatef((float)angle, 0,0,1);
 
