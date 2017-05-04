@@ -1,9 +1,9 @@
 package com.chinatsp.glesdemo.demos;
 
-import android.graphics.Point;
 import android.opengl.GLU;
 import android.util.Log;
 
+import com.chinatsp.glesdemo.demos.Model.DrawRoute;
 import com.chinatsp.glesdemo.demos.Model.Routine;
 
 import java.util.ArrayList;
@@ -1159,7 +1159,8 @@ public class DrawRoudActivity extends OpenGLESActivity {
 
     private Routine routine;
 
-    private int currPosition = 3;
+    private int currPosition = 0;
+//    private int currPosition = 3;
     private float[] points;
 
     float[] eyePosition = new float[] {0,0,0.3f};
@@ -1173,10 +1174,10 @@ public class DrawRoudActivity extends OpenGLESActivity {
         path = mapToCoordinatesInserted(path);
 
 
-        Point point = new Point();
-        getWindow().getWindowManager().getDefaultDisplay().getSize(point);
-
-        routine = new Routine(point.x, point.y);
+//        Point point = new Point();
+//        getWindow().getWindowManager().getDefaultDisplay().getSize(point);
+//
+//        routine = new Routine(point.x, point.y);
 
 
         mGlSurfaceView.postDelayed(new Runnable() {
@@ -1190,6 +1191,8 @@ public class DrawRoudActivity extends OpenGLESActivity {
             }
         }, 500);
     }
+
+    private DrawRoute drawRoute = new DrawRoute();
 
     @Override
     public void DrawScene(GL10 gl) {
@@ -1208,24 +1211,30 @@ public class DrawRoudActivity extends OpenGLESActivity {
         Log.e("sss", String.format("curr:"+currPosition+ "/"+path.size()+"  look at:%f,%f,%f --->%f,%f,%f", eyePosition[0], eyePosition[1], eyePosition[2],
                 target[0], target[1],target[2]));
 
-        points = routeMapToCoordinates(path.subList(currPosition, currPosition+6));
-        routine.setPath(points);
 
-        double angle = getEyeDirectionAngle(points[3], points[4]);
-
-        gl.glPushMatrix();
-        gl.glTranslatef(0.3f,0.3f,0);
+        drawRoute.setPathPoints(path.subList(currPosition,  currPosition+6));
+        drawRoute.draw(gl);
 
 
-        routine.drawArrow(gl, 0.03f);
-        routine.drawArrow(gl, 0.0525f);
-//        routine.drawArrow(gl, 0.15f);
 
-        gl.glRotatef((float)angle, 0,0,1);
+//        points = routeMapToCoordinates(path.subList(currPosition, currPosition+6));
+//        routine.setPath(points);
+
+//        double angle = getEyeDirectionAngle(points[3], points[4]);
+
+//        gl.glPushMatrix();
+//        gl.glTranslatef(0.3f,0.3f,0);
+
+
+//        routine.drawArrow(gl, 0.03f);
+//        routine.drawArrow(gl, 0.0525f);
+////        routine.drawArrow(gl, 0.15f);
+//
+//        gl.glRotatef((float)angle, 0,0,1);
 
 //        gl.glPushMatrix();
 //        gl.glTranslatef(-0.1f, -0.2f, 0);
-        routine.draw(gl);
+//        routine.draw(gl);
 //        gl.glPopMatrix();
 ////
 //        gl.glPushMatrix();
@@ -1233,7 +1242,7 @@ public class DrawRoudActivity extends OpenGLESActivity {
 //        routine.draw(gl);
 //        gl.glPopMatrix();
 
-        gl.glPopMatrix();
+//        gl.glPopMatrix();
 
 
         currPosition ++;

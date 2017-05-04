@@ -28,11 +28,11 @@ public class DrawRoute {
     }
 
     public void setPathPoints(final List<double[]> path) {
+        pathPoints.clear();
         pathPoints.addAll(path);
         points = routeMapToCoordinates(pathPoints);
         printArray(points, 3);
     }
-
 
 
     public void draw(GL10 gl) {
@@ -46,21 +46,19 @@ public class DrawRoute {
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 
         gl.glPushMatrix();
-        //draw line and arrow
-        int idx = 3;
-//        while (idx < points.length -6) {
-            float firstX = points[idx++];
-            float firstY = points[idx++];
-            float firstZ = points[idx++];
-            float secondX = points[idx++];
-            float secondY = points[idx++];
-            float secondZ = points[idx++];
 
-            gl.glTranslatef(points[0] - points[3], points[1] - points[4], 0);
-            drawTwo(gl, firstX, firstY, firstZ, secondX, secondY, secondZ);
-//            idx -=3;
-//        }
+        double angle = getEyeDirectionAngle(points[3], points[4]);
+        gl.glRotatef((float)angle, 0,0,1);
 
+
+//        int i=0;
+        for (int i=0; i<points.length - 5; i+=3) {
+            drawArrow(gl, points[i], points[i+1], points[i+3], points[i+4]);
+        }
+
+
+        //draw route
+        drawRouteLine(gl, points);
 
         gl.glPopMatrix();
         gl.glFlush();
@@ -68,41 +66,66 @@ public class DrawRoute {
 
     }
 
-
-
-    private void drawTwo(GL10 gl, float firstX, float firstY, float firstZ,
-                         float secondX, float secondY, float secondZ) {
-
-        Log.e("ss", String.format("%f,%f,%f  ->%f,%f,%f",firstX, firstY,firstZ, secondX, secondY, secondZ));
-
-        float dirtectionX = secondX - firstX;
-        float dirtectionY = secondY - firstY;
+    /**
+     * 传入向量与正上方向量比较：
+     * 向量夹角为正是逆时针方向转动，负为顺时针方向转动
+     */
+    private float getArrowAngle(float startX, float startY,
+                                float endX, float endY) {
 
 
 
-        drawLines(gl, new float[]{0, 0, 0, dirtectionX, dirtectionY, 0});
-
+        double angle = calculateVectorAngle(points[3] - points[0], points[4] - points[1], endX - startX, endY - startY);
+        Log.e("sss", String.format("getArrowAngle: %f,%f--%f,%f--%f,%f--%f,%f=====>%f"
+                ,  points[0], points[1], points[3], points[4], startX,startY, endX,endY, angle));
+        return (float) angle;
     }
 
+    private final float deltaX = 0.03f;
+    private final float height = 0.08f;
 
-    private final float deltaX = 0.02f;
+    private void drawArrow(GL10 gl, float startX, float startY,
+                           float endX, float endY) {
 
-    private void drawArrow(GL10 gl, float height) {
+        float angle = getArrowAngle(startX, startY, endX, endY);
+
+        int sign = -1;
+        if (endY < startY) {
+            sign = 1;
+        }
 
         float[] points = {
-            deltaX, height - deltaX, 0,
-                0, height,0,
-                -deltaX,height - deltaX,0
+            0+deltaX, height*sign , 0,
+                0, 0,0,
+                0-deltaX, height*sign,0
         };
 
+
+        Log.e("ss", "arrows:");
+        printArray(points, 3);
+
         gl.glPushMatrix();
-        gl.glRotatef(-45,0,0,1);
-        drawLines(gl, points);
+        gl.glTranslatef(endX, endY, 0);
+        //opengl es :正数左转，负数右转
+        gl.glRotatef(angle, 0,0,1);
+        drawArrowLine(gl, points);
+        gl.glTranslatef(-endX, -endY, 0);
+
+
+//        drawLines(gl, pointste, 10);
         gl.glPopMatrix();
 
     }
 
-    private void drawLines(GL10 gl, float[] points) {
+    private void drawArrowLine(GL10 gl, float[] points) {
+        drawLines(gl, points, 1);
+    }
+
+    private void drawRouteLine(GL10 gl, float[] points) {
+        drawLines(gl, points, 2);
+    }
+
+    private void drawLines(GL10 gl, float[] points, float lineSize) {
 
         ByteBuffer vbb = ByteBuffer.allocateDirect(points.length * 4);
         vbb.order(ByteOrder.nativeOrder());
@@ -112,32 +135,36 @@ public class DrawRoute {
 
 
         gl.glColor4f(1f, 1f,1f,1f);
-        gl.glLineWidth(5f);
+        gl.glLineWidth(lineSize);
+        gl.glPointSize(20);
 
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexes);
         gl.glDrawArrays(GL10.GL_LINE_STRIP, 0, points.length/3);
-        gl.glDrawArrays(GL10.GL_POINTS, 0, points.length/3);
+//        gl.glDrawArrays(GL10.GL_POINTS, 0, points.length/3);
 
         gl.glFlush();
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
     }
 
     private double getEyeDirectionAngle(double x, double y) {
+        return calculateVectorAngle(x, y, 0.5f, 0.5f);
+    }
 
-//        Log.e("sss", "origin:"+points[0]+"  "  +points[1] + " x:"+x+ "  "+y);
+    private double calculateVectorAngle(double x1, double y1, double x2, double y2) {
 
-        double cos = (0.5 * x + 0.5 * y)
-                / Math.sqrt((x * x + y * y) * (0.5 * 0.5 + 0.5 * 0.5f));
+        double cos = (x1 * x2 + y1 * y2) /
+                (Math.sqrt(x1*x1 +y1*y1) * Math.sqrt(x2*x2 + y2*y2));
         double angle = Math.round(Math.toDegrees(Math.acos(cos)));
 
-//        double axb = target[0] * y - x * target[1];
-        double axb = x * 0.5 - 0.5 * y;
+        double axb = x1 * y2 - x2 * y1;
         if (axb <0) {
-            angle *= -1;
+            angle = - Math.abs(angle);
+        }else {
+            angle = Math.abs(angle);
         }
-//        Log.e("sss", "index:"+ currPosition+"    angle:"+angle+ " cos:"+cos);
+        Log.e("sss", "index:    angle:"+angle+ " cos:"+cos);
         return angle;
     }
 
@@ -151,15 +178,6 @@ public class DrawRoute {
             points[idx++] = (float) (point[1] - origin[1]) * 10000;
             points[idx++] = 0f;
         }
-//        printArray(points, 3);
-        return points;
-    }
-
-    private float[] routeMpatoCoordinates(double[] first, double[] second) {
-        float[] points = new float[]{
-                0,0,0,
-                (float) (second[0] - first[0]) * 10000, (float) (second[1] - first[1]) * 10000, 0
-        };
 //        printArray(points, 3);
         return points;
     }
