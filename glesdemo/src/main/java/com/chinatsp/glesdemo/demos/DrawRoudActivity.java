@@ -1,5 +1,6 @@
 package com.chinatsp.glesdemo.demos;
 
+import android.graphics.Point;
 import android.opengl.GLU;
 import android.util.Log;
 
@@ -1171,7 +1172,11 @@ public class DrawRoudActivity extends OpenGLESActivity {
         filterDuplicatedPoints(path);
         path = mapToCoordinatesInserted(path);
 
-        routine = new Routine();
+
+        Point point = new Point();
+        getWindow().getWindowManager().getDefaultDisplay().getSize(point);
+
+        routine = new Routine(point.x, point.y);
 
 
         mGlSurfaceView.postDelayed(new Runnable() {
