@@ -15,7 +15,12 @@ public abstract class OpenGLES20Activity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        glSurfaceView = new MySurfaceView(this, createRenderer());
+        GL20Renderer renderer = createRenderer3D();
+        if (renderer != null) {
+            glSurfaceView = new MySurfaceView(this, renderer);
+        }else {
+            glSurfaceView = new MySurfaceView(this, createRenderer());
+        }
         setContentView(glSurfaceView);
     }
 
@@ -32,4 +37,5 @@ public abstract class OpenGLES20Activity extends AppCompatActivity {
     }
 
     protected abstract GL20Renderer2D createRenderer();
+    protected abstract GL20Renderer createRenderer3D();
 }

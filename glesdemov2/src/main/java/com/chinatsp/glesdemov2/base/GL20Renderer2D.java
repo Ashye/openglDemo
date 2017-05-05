@@ -24,11 +24,13 @@ public class GL20Renderer2D implements GLSurfaceView.Renderer {
     protected float mAngle = 0;
 
 
-    private int muMVPMatrixHandle;
-    private float[] mMVPMatrix = new float[16];
-    private float[] mVMatrix = new float[16];
-    private float[] mProjMatrix = new float[16];
+    protected int muMVPMatrixHandle;
+    protected float[] mMVPMatrix = new float[16];
+    protected float[] mVMatrix = new float[16];
+    protected float[] mProjMatrix = new float[16];
 
+
+    protected float[] mMMatrix = new float[16];
 
     @Override
     public void onSurfaceCreated(GL10 gl10, EGLConfig eglConfig) {
@@ -56,7 +58,7 @@ public class GL20Renderer2D implements GLSurfaceView.Renderer {
 
         // this projection matrix is applied to object coodinates
         // in the onDrawFrame() method
-        Matrix.frustumM(mProjMatrix, 0, -ratio, ratio, -1, 1, 3, 7);
+        Matrix.frustumM(mProjMatrix, 0, -ratio, ratio, -1, 1, 1, 7);
 
         muMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
     }
@@ -66,21 +68,21 @@ public class GL20Renderer2D implements GLSurfaceView.Renderer {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT | GLES20.GL_DEPTH_BUFFER_BIT);
 
         Matrix.setLookAtM(mVMatrix, 0,
-                0,0,3,
+                0,0,3f,
                 0,0,0,
-                0f, 1.0f, 0.0f);
+                0f, 1f, 0.0f);
 
 
         // Add program to OpenGL environment
         GLES20.glUseProgram(mProgram);
 
 
-//         Apply a ModelView Projection transformation
-        Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mVMatrix, 0);
-        GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, mMVPMatrix, 0);
+////         Apply a ModelView Projection transformation
+//        Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mVMatrix, 0);
+//        GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, mMVPMatrix, 0);
 
 
-//        GLES20.glLineWidth(10f);
+        GLES20.glLineWidth(5f);
 
         //画内容
 

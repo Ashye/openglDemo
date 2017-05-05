@@ -1,6 +1,7 @@
 package com.chinatsp.glesdemov2.demo;
 
 import android.opengl.GLES20;
+import android.opengl.Matrix;
 
 import com.chinatsp.glesdemov2.base.GL20Renderer2D;
 
@@ -16,6 +17,11 @@ public class RobotRender extends GL20Renderer2D {
     @Override
     public void onDrawFrame(GL10 gl10) {
         super.onDrawFrame(gl10);
+
+
+        ////         Apply a ModelView Projection transformation
+        Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mVMatrix, 0);
+        GLES20.glUniformMatrix4fv(muMVPMatrixHandle, 1, false, mMVPMatrix, 0);
 
         //head
         drawLine(GLES20.GL_LINE_STRIP, new float[]{-0.125f,0.7f,0, -0.125f,0.8f,0}, null);

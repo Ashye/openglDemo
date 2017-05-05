@@ -24,6 +24,8 @@ public class DrawLineActivity extends OpenGLESActivity {
             2f , 2f , 0.0f ,
     };
 
+
+
     @Override
     public void DrawScene(GL10 gl) {
         super.DrawScene(gl);
@@ -53,7 +55,7 @@ public class DrawLineActivity extends OpenGLESActivity {
             case 1:
             case 2:
                 gl.glColor4f(1f,0f,0f,1f);
-                gl.glDrawArrays(GL10.GL_LINES, 0, 4);
+                gl.glDrawArrays(GL10.GL_LINE_STRIP, 0, 4);
                 break;
             case 3:
             case 4:

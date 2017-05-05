@@ -23,6 +23,7 @@ public class DrawRoute {
 
     private float[] points;
 
+
     public DrawRoute() {
 
     }
@@ -31,8 +32,127 @@ public class DrawRoute {
         pathPoints.clear();
         pathPoints.addAll(path);
         points = routeMapToCoordinates(pathPoints);
+
         printArray(points, 3);
     }
+
+
+    /**
+     * 两点两点画，然后平移
+     * @param gl
+     */
+    public void drawParts(GL10 gl) {
+        gl.glColor4f(1f, 1f,1f,1f);
+        gl.glPointSize(20f);
+        gl.glLineWidth(5f);
+
+        gl.glTranslatef(0.3f, 0.3f, 0);
+
+
+        gl.glPushMatrix();
+
+
+        double angle = getEyeDirectionAngle(points[3], points[4]);
+        gl.glRotatef((float)angle, 0,0,1);
+
+        gl.glPushMatrix();
+        int i=0;
+        for (; i< points.length -5; i+=3) {
+            drawTwo(gl, points[i], points[i+1], points[i+3], points[i+4]);
+        }
+
+
+        gl.glPopMatrix();
+
+
+        //draw route
+//        drawRouteLine(gl, points);
+
+        gl.glPopMatrix();
+//        gl.glFlush();
+//        gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+
+    }
+
+    //计算箭头坐标失败
+    private void drawTwo(GL10 gl, float x1, float y1, float x2, float y2) {
+        float[] points = {
+                x1, y1, 0, x2, y2,0
+        };
+
+
+        float angleOfArrow = 60;
+        float angle = getArrowAngle(x1, y1, x2, y2);
+        float size = 0.1f;
+
+        float centerX = (x1+x2)/2;
+        float centerY = (y1+y2)/2;
+
+         float x11 = (float) (centerX - size * Math.cos(Math.toRadians(angleOfArrow/2+angle)));
+         float y11 = (float) (centerY - size * Math.sin(Math.toRadians(angleOfArrow/2+angle)));
+
+         float x12 = (float) (centerX - size * Math.sin(Math.toRadians(angleOfArrow/2+angle)));
+         float y12 = (float) (centerY + size * Math.cos(Math.toRadians(angleOfArrow/2+angle)));
+
+        float[] pointsArrowtest = {
+                x11,y11,0, centerX,centerY,0, x12, y12,0
+        };
+
+        drawLines(gl, points, 2);
+        gl.glPushMatrix();
+        gl.glTranslatef((x1+x2)/2,(y1+y2)/2,0);
+        drawArrowLine(gl, pointsArrowtest);
+        gl.glPopMatrix();
+    }
+
+
+
+
+
+
+
+    public void drawroute(GL10 gl) {
+        gl.glColor4f(1f, 1f,1f,1f);
+        gl.glPointSize(20f);
+        gl.glLineWidth(5f);
+
+        gl.glTranslatef(0.3f, 0.3f, 0);
+
+        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+
+        gl.glPushMatrix();
+
+        double angle = getEyeDirectionAngle(points[3], points[4]);
+        gl.glRotatef((float)angle, 0,0,1);
+
+        //draw route
+        drawRouteLine(gl, points);
+
+        gl.glPopMatrix();
+        gl.glFlush();
+        gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     public void draw(GL10 gl) {
@@ -125,7 +245,7 @@ public class DrawRoute {
         drawLines(gl, points, 2);
     }
 
-    private void drawLines(GL10 gl, float[] points, float lineSize) {
+    public void drawLines(GL10 gl, float[] points, float lineSize) {
 
         ByteBuffer vbb = ByteBuffer.allocateDirect(points.length * 4);
         vbb.order(ByteOrder.nativeOrder());
@@ -142,7 +262,7 @@ public class DrawRoute {
 
         gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexes);
         gl.glDrawArrays(GL10.GL_LINE_STRIP, 0, points.length/3);
-//        gl.glDrawArrays(GL10.GL_POINTS, 0, points.length/3);
+        gl.glDrawArrays(GL10.GL_POINTS, 0, points.length/3);
 
         gl.glFlush();
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
@@ -180,6 +300,42 @@ public class DrawRoute {
         }
 //        printArray(points, 3);
         return points;
+    }
+
+
+    private void mapToNewCoordinates(float[] oldPoints, float angle) {
+        int i = 0;
+
+        double cos = Math.cos(Math.toRadians(angle));
+        double sin = Math.sin(Math.toRadians(angle));
+        while (i<oldPoints.length-2) {
+            oldPoints[i] = (float) (oldPoints[i]*cos + oldPoints[i+1]*sin);
+            oldPoints[i] =(float)(oldPoints[i+1]*cos - oldPoints[i]*sin);
+            i+=3;
+        }
+
+    }
+
+    private float[] pathPointToBroader(float[] path, float angle) {
+        float[] result = new float[path.length];
+        int i=0;
+        while (i < path.length -2) {
+
+            float a = path[i];
+            float b = path[i+1];
+
+            if (angle >0) {
+                result[i] = (float) (a * Math.cos(Math.toRadians(angle)) - b * Math.sin(Math.toRadians(angle)));
+                result[i + 1] = (float) (a * Math.sin(Math.toRadians(angle)) + b * Math.cos(Math.toRadians(angle)));
+            }else {
+                result[i] = (float) (a * Math.cos(Math.toRadians(angle)) + b * Math.sin(Math.toRadians(angle)));
+                result[i + 1] = (float) (b * Math.cos(Math.toRadians(angle)) + a * Math.sin(Math.toRadians(angle)));
+            }
+            result[i+2] = 0;
+
+            i+=3;
+        }
+        return result;
     }
 
     private void printArray(float[] data, int unitSize) {

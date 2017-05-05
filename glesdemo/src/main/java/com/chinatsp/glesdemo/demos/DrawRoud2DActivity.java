@@ -1,17 +1,15 @@
 package com.chinatsp.glesdemo.demos;
 
-import android.opengl.GLU;
 import android.util.Log;
 
-import com.chinatsp.glesdemo.demos.Model.DrawRoute;
-import com.chinatsp.glesdemo.demos.Model.Routine;
+import com.chinatsp.glesdemo.demos.Model.DrawRoute2D;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.microedition.khronos.opengles.GL10;
 
-public class DrawRoudActivity extends OpenGLESActivity {
+public class DrawRoud2DActivity extends OpenGLESActivity {
 
 
     //经纬度
@@ -19,95 +17,95 @@ public class DrawRoudActivity extends OpenGLESActivity {
 
 
     {
-        path.add(new double[]{113.95606, 22.53871});
-        path.add(new double[]{113.95617, 22.53871});
-        path.add(new double[]{113.95633, 22.53865});
-        path.add(new double[]{113.95652, 22.5385});
-        path.add(new double[]{113.95652, 22.5385});
-        path.add(new double[]{113.95656, 22.53853});
-        path.add(new double[]{113.95656, 22.53853});
-        path.add(new double[]{113.95664, 22.53858});
-        path.add(new double[]{113.95664, 22.53858});
-        path.add(new double[]{113.9568, 22.53836});
-        path.add(new double[]{113.9568, 22.53836});
-        path.add(new double[]{113.95696, 22.53814});
-        path.add(new double[]{113.95696, 22.53814});
-        path.add(new double[]{113.95699, 22.53804});
-        path.add(new double[]{113.95698, 22.53794});
-        path.add(new double[]{113.95698, 22.53794});
-        path.add(new double[]{113.9569, 22.53776});
-        path.add(new double[]{113.9569, 22.53776});
-        path.add(new double[]{113.95686, 22.53769});
-        path.add(new double[]{113.95686, 22.53769});
-        path.add(new double[]{113.95682, 22.53764});
-        path.add(new double[]{113.95682, 22.53764});
-        path.add(new double[]{113.95673, 22.53748});
-        path.add(new double[]{113.95673, 22.53748});
-        path.add(new double[]{113.95665, 22.53734});
-        path.add(new double[]{113.95665, 22.53734});
-        path.add(new double[]{113.95642, 22.53698});
-        path.add(new double[]{113.95642, 22.53698});
-        path.add(new double[]{113.95639, 22.53692});
-        path.add(new double[]{113.95639, 22.53692});
-        path.add(new double[]{113.95618, 22.53656});
-        path.add(new double[]{113.95618, 22.53656});
-        path.add(new double[]{113.95616, 22.53653});
-        path.add(new double[]{113.95616, 22.53653});
-        path.add(new double[]{113.956, 22.53628});
-        path.add(new double[]{113.956, 22.53628});
-        path.add(new double[]{113.95563, 22.53569});
-        path.add(new double[]{113.95563, 22.53569});
-        path.add(new double[]{113.95559, 22.5356});
-        path.add(new double[]{113.95559, 22.5356});
-        path.add(new double[]{113.95559, 22.53552});
-        path.add(new double[]{113.95559, 22.53552});
-        path.add(new double[]{113.95643, 22.53511});
-        path.add(new double[]{113.95643, 22.53511});
-        path.add(new double[]{113.95656, 22.53492});
-        path.add(new double[]{113.95656, 22.53473});
-        path.add(new double[]{113.95656, 22.53473});
-        path.add(new double[]{113.95636, 22.53443});
-        path.add(new double[]{113.95636, 22.53443});
-        path.add(new double[]{113.95628, 22.5343});
-        path.add(new double[]{113.95628, 22.5343});
-        path.add(new double[]{113.95537, 22.53281});
-        path.add(new double[]{113.95509, 22.53217});
-        path.add(new double[]{113.95491, 22.53157});
-        path.add(new double[]{113.95491, 22.53157});
-        path.add(new double[]{113.95488, 22.53091});
-        path.add(new double[]{113.95488, 22.53091});
-        path.add(new double[]{113.95474, 22.52854});
-        path.add(new double[]{113.95474, 22.52854});
-        path.add(new double[]{113.95473, 22.52832});
-        path.add(new double[]{113.95473, 22.52832});
-        path.add(new double[]{113.95469, 22.52788});
-        path.add(new double[]{113.95469, 22.52788});
-        path.add(new double[]{113.95465, 22.52719});
-        path.add(new double[]{113.95465, 22.52719});
-        path.add(new double[]{113.95465, 22.52711});
-        path.add(new double[]{113.95465, 22.52711});
-        path.add(new double[]{113.95461, 22.52674});
-        path.add(new double[]{113.95461, 22.52674});
-        path.add(new double[]{113.95454, 22.52608});
-        path.add(new double[]{113.95454, 22.52608});
-        path.add(new double[]{113.95452, 22.52587});
-        path.add(new double[]{113.95452, 22.52587});
-        path.add(new double[]{113.95436, 22.5247});
-        path.add(new double[]{113.95431, 22.52408});
-        path.add(new double[]{113.95431, 22.52408});
-        path.add(new double[]{113.95429, 22.52398});
-        path.add(new double[]{113.95429, 22.52398});
-        path.add(new double[]{113.954, 22.52162});
-        path.add(new double[]{113.954, 22.52162});
-        path.add(new double[]{113.9539, 22.52095});
-        path.add(new double[]{113.9539, 22.52095});
-        path.add(new double[]{113.95383, 22.5203});
-        path.add(new double[]{113.95383, 22.5203});
-        path.add(new double[]{113.9536, 22.51968});
-        path.add(new double[]{113.95354, 22.51959});
-        path.add(new double[]{113.95336, 22.51945});
-        path.add(new double[]{113.95317, 22.51939});
-        path.add(new double[]{113.95301, 22.51938});
+//        path.add(new double[]{113.95606, 22.53871});
+//        path.add(new double[]{113.95617, 22.53871});
+//        path.add(new double[]{113.95633, 22.53865});
+//        path.add(new double[]{113.95652, 22.5385});
+//        path.add(new double[]{113.95652, 22.5385});
+//        path.add(new double[]{113.95656, 22.53853});
+//        path.add(new double[]{113.95656, 22.53853});
+//        path.add(new double[]{113.95664, 22.53858});
+//        path.add(new double[]{113.95664, 22.53858});
+//        path.add(new double[]{113.9568, 22.53836});
+//        path.add(new double[]{113.9568, 22.53836});
+//        path.add(new double[]{113.95696, 22.53814});
+//        path.add(new double[]{113.95696, 22.53814});
+//        path.add(new double[]{113.95699, 22.53804});
+//        path.add(new double[]{113.95698, 22.53794});
+//        path.add(new double[]{113.95698, 22.53794});
+//        path.add(new double[]{113.9569, 22.53776});
+//        path.add(new double[]{113.9569, 22.53776});
+//        path.add(new double[]{113.95686, 22.53769});
+//        path.add(new double[]{113.95686, 22.53769});
+//        path.add(new double[]{113.95682, 22.53764});
+//        path.add(new double[]{113.95682, 22.53764});
+//        path.add(new double[]{113.95673, 22.53748});
+//        path.add(new double[]{113.95673, 22.53748});
+//        path.add(new double[]{113.95665, 22.53734});
+//        path.add(new double[]{113.95665, 22.53734});
+//        path.add(new double[]{113.95642, 22.53698});
+//        path.add(new double[]{113.95642, 22.53698});
+//        path.add(new double[]{113.95639, 22.53692});
+//        path.add(new double[]{113.95639, 22.53692});
+//        path.add(new double[]{113.95618, 22.53656});
+//        path.add(new double[]{113.95618, 22.53656});
+//        path.add(new double[]{113.95616, 22.53653});
+//        path.add(new double[]{113.95616, 22.53653});
+//        path.add(new double[]{113.956, 22.53628});
+//        path.add(new double[]{113.956, 22.53628});
+//        path.add(new double[]{113.95563, 22.53569});
+//        path.add(new double[]{113.95563, 22.53569});
+//        path.add(new double[]{113.95559, 22.5356});
+//        path.add(new double[]{113.95559, 22.5356});
+//        path.add(new double[]{113.95559, 22.53552});
+//        path.add(new double[]{113.95559, 22.53552});
+//        path.add(new double[]{113.95643, 22.53511});
+//        path.add(new double[]{113.95643, 22.53511});
+//        path.add(new double[]{113.95656, 22.53492});
+//        path.add(new double[]{113.95656, 22.53473});
+//        path.add(new double[]{113.95656, 22.53473});
+//        path.add(new double[]{113.95636, 22.53443});
+//        path.add(new double[]{113.95636, 22.53443});
+//        path.add(new double[]{113.95628, 22.5343});
+//        path.add(new double[]{113.95628, 22.5343});
+//        path.add(new double[]{113.95537, 22.53281});
+//        path.add(new double[]{113.95509, 22.53217});
+//        path.add(new double[]{113.95491, 22.53157});
+//        path.add(new double[]{113.95491, 22.53157});
+//        path.add(new double[]{113.95488, 22.53091});
+//        path.add(new double[]{113.95488, 22.53091});
+//        path.add(new double[]{113.95474, 22.52854});
+//        path.add(new double[]{113.95474, 22.52854});
+//        path.add(new double[]{113.95473, 22.52832});
+//        path.add(new double[]{113.95473, 22.52832});
+//        path.add(new double[]{113.95469, 22.52788});
+//        path.add(new double[]{113.95469, 22.52788});
+//        path.add(new double[]{113.95465, 22.52719});
+//        path.add(new double[]{113.95465, 22.52719});
+//        path.add(new double[]{113.95465, 22.52711});
+//        path.add(new double[]{113.95465, 22.52711});
+//        path.add(new double[]{113.95461, 22.52674});
+//        path.add(new double[]{113.95461, 22.52674});
+//        path.add(new double[]{113.95454, 22.52608});
+//        path.add(new double[]{113.95454, 22.52608});
+//        path.add(new double[]{113.95452, 22.52587});
+//        path.add(new double[]{113.95452, 22.52587});
+//        path.add(new double[]{113.95436, 22.5247});
+//        path.add(new double[]{113.95431, 22.52408});
+//        path.add(new double[]{113.95431, 22.52408});
+//        path.add(new double[]{113.95429, 22.52398});
+//        path.add(new double[]{113.95429, 22.52398});
+//        path.add(new double[]{113.954, 22.52162});
+//        path.add(new double[]{113.954, 22.52162});
+//        path.add(new double[]{113.9539, 22.52095});
+//        path.add(new double[]{113.9539, 22.52095});
+//        path.add(new double[]{113.95383, 22.5203});
+//        path.add(new double[]{113.95383, 22.5203});
+//        path.add(new double[]{113.9536, 22.51968});
+//        path.add(new double[]{113.95354, 22.51959});
+//        path.add(new double[]{113.95336, 22.51945});
+//        path.add(new double[]{113.95317, 22.51939});
+//        path.add(new double[]{113.95301, 22.51938});
 //        path.add(new double[]{113.95268, 22.51949});
 //        path.add(new double[]{113.95256, 22.51965});
 //        path.add(new double[]{113.95247, 22.51989});
@@ -1077,94 +1075,88 @@ public class DrawRoudActivity extends OpenGLESActivity {
 
 
 
-//        path.add(new double[] {113.95398, 22.53655});
-//        path.add(new double[] {113.95399, 22.5364});
-//        path.add(new double[] {113.95399, 22.5364});
-//        path.add(new double[] {113.95399, 22.53632});
-//        path.add(new double[] {113.95399, 22.53632});
-//        path.add(new double[] {113.95403, 22.53631});
-//        path.add(new double[] {113.95403, 22.53631});
-//        path.add(new double[] {113.95403, 22.5364});
-//        path.add(new double[] {113.95403, 22.5364});
-//        path.add(new double[] {113.95402, 22.53665});
-//        path.add(new double[] {113.95402, 22.53665});
-//        path.add(new double[] {113.95401, 22.53684});
-//        path.add(new double[] {113.95401, 22.53684});
-//        path.add(new double[] {113.954, 22.53713});
-//        path.add(new double[] {113.954, 22.53713});
-//        path.add(new double[] {113.954, 22.53721});
-//        path.add(new double[] {113.954, 22.53721});
-//        path.add(new double[] {113.95399, 22.53752});
-//        path.add(new double[] {113.95399, 22.53752});
-//        path.add(new double[] {113.95398, 22.53776});
-//        path.add(new double[] {113.95398, 22.53776});
-//        path.add(new double[] {113.95398, 22.53829});
-//        path.add(new double[] {113.95398, 22.53829});
-//        path.add(new double[] {113.95397, 22.53888});
-//        path.add(new double[] {113.95397, 22.53888});
-//        path.add(new double[] {113.95395, 22.53895});
-//        path.add(new double[] {113.95395, 22.53895});
-//        path.add(new double[] {113.95396, 22.5392});
-//        path.add(new double[] {113.95396, 22.5392});
-//        path.add(new double[] {113.95396, 22.53938});
-//        path.add(new double[] {113.95396, 22.53938});
-//        path.add(new double[] {113.95395, 22.53965});
-//        path.add(new double[] {113.95395, 22.53965});
-//        path.add(new double[] {113.95394, 22.53987});
-//        path.add(new double[] {113.95394, 22.53987});
-//        path.add(new double[] {113.95393, 22.54012});
-//        path.add(new double[] {113.95393, 22.54012});
-//        path.add(new double[] {113.95394, 22.54038});
-//        path.add(new double[] {113.95394, 22.54038});
-//        path.add(new double[] {113.95386, 22.54038});
-//        path.add(new double[] {113.95386, 22.54038});
-//        path.add(new double[] {113.95357, 22.54036});
-//        path.add(new double[] {113.95357, 22.54036});
-//        path.add(new double[] {113.95329, 22.54035});
-//        path.add(new double[] {113.95329, 22.54035});
-//        path.add(new double[] {113.95295, 22.54034});
-//        path.add(new double[] {113.95295, 22.54034});
-//        path.add(new double[] {113.95225, 22.54031});
-//        path.add(new double[] {113.95225, 22.54031});
-//        path.add(new double[] {113.95198, 22.5403});
-//        path.add(new double[] {113.95198, 22.5403});
-//        path.add(new double[] {113.95171, 22.54028});
-//        path.add(new double[] {113.95171, 22.54028});
-//        path.add(new double[] {113.95131, 22.54026});
-//        path.add(new double[] {113.95131, 22.54026});
-//        path.add(new double[] {113.94914, 22.54016});
-//        path.add(new double[] {113.94914, 22.54016});
-//        path.add(new double[] {113.94805, 22.54012});
-//        path.add(new double[] {113.94805, 22.54012});
-//        path.add(new double[] {113.94786, 22.54009});
-//        path.add(new double[] {113.94786, 22.54009});
-//        path.add(new double[] {113.94742, 22.54008});
-//        path.add(new double[] {113.94742, 22.54008});
-//        path.add(new double[] {113.94695, 22.54006});
-//        path.add(new double[] {113.94695, 22.54006});
-//        path.add(new double[] {113.9463, 22.54003});
-//        path.add(new double[] {113.9463, 22.54003});
-//        path.add(new double[] {113.94578, 22.54001});
-//        path.add(new double[] {113.94578, 22.54001});
-//        path.add(new double[] {113.94552, 22.54});
-//        path.add(new double[] {113.94552, 22.54});
-//        path.add(new double[] {113.94532, 22.53999});
-//        path.add(new double[] {113.94532, 22.53999});
-//        path.add(new double[] {113.94465, 22.53995});
-//        path.add(new double[] {113.94465, 22.53995});
-//        path.add(new double[] {113.94331, 22.53989});
-//        path.add(new double[] {113.94331, 22.53989});
-//        path.add(new double[] {113.94285, 22.53996});
+        path.add(new double[] {113.95398, 22.53655});
+        path.add(new double[] {113.95399, 22.5364});
+        path.add(new double[] {113.95399, 22.5364});
+        path.add(new double[] {113.95399, 22.53632});
+        path.add(new double[] {113.95399, 22.53632});
+        path.add(new double[] {113.95403, 22.53631});
+        path.add(new double[] {113.95403, 22.53631});
+        path.add(new double[] {113.95403, 22.5364});
+        path.add(new double[] {113.95403, 22.5364});
+        path.add(new double[] {113.95402, 22.53665});
+        path.add(new double[] {113.95402, 22.53665});
+        path.add(new double[] {113.95401, 22.53684});
+        path.add(new double[] {113.95401, 22.53684});
+        path.add(new double[] {113.954, 22.53713});
+        path.add(new double[] {113.954, 22.53713});
+        path.add(new double[] {113.954, 22.53721});
+        path.add(new double[] {113.954, 22.53721});
+        path.add(new double[] {113.95399, 22.53752});
+        path.add(new double[] {113.95399, 22.53752});
+        path.add(new double[] {113.95398, 22.53776});
+        path.add(new double[] {113.95398, 22.53776});
+        path.add(new double[] {113.95398, 22.53829});
+        path.add(new double[] {113.95398, 22.53829});
+        path.add(new double[] {113.95397, 22.53888});
+        path.add(new double[] {113.95397, 22.53888});
+        path.add(new double[] {113.95395, 22.53895});
+        path.add(new double[] {113.95395, 22.53895});
+        path.add(new double[] {113.95396, 22.5392});
+        path.add(new double[] {113.95396, 22.5392});
+        path.add(new double[] {113.95396, 22.53938});
+        path.add(new double[] {113.95396, 22.53938});
+        path.add(new double[] {113.95395, 22.53965});
+        path.add(new double[] {113.95395, 22.53965});
+        path.add(new double[] {113.95394, 22.53987});
+        path.add(new double[] {113.95394, 22.53987});
+        path.add(new double[] {113.95393, 22.54012});
+        path.add(new double[] {113.95393, 22.54012});
+        path.add(new double[] {113.95394, 22.54038});
+        path.add(new double[] {113.95394, 22.54038});
+        path.add(new double[] {113.95386, 22.54038});
+        path.add(new double[] {113.95386, 22.54038});
+        path.add(new double[] {113.95357, 22.54036});
+        path.add(new double[] {113.95357, 22.54036});
+        path.add(new double[] {113.95329, 22.54035});
+        path.add(new double[] {113.95329, 22.54035});
+        path.add(new double[] {113.95295, 22.54034});
+        path.add(new double[] {113.95295, 22.54034});
+        path.add(new double[] {113.95225, 22.54031});
+        path.add(new double[] {113.95225, 22.54031});
+        path.add(new double[] {113.95198, 22.5403});
+        path.add(new double[] {113.95198, 22.5403});
+        path.add(new double[] {113.95171, 22.54028});
+        path.add(new double[] {113.95171, 22.54028});
+        path.add(new double[] {113.95131, 22.54026});
+        path.add(new double[] {113.95131, 22.54026});
+        path.add(new double[] {113.94914, 22.54016});
+        path.add(new double[] {113.94914, 22.54016});
+        path.add(new double[] {113.94805, 22.54012});
+        path.add(new double[] {113.94805, 22.54012});
+        path.add(new double[] {113.94786, 22.54009});
+        path.add(new double[] {113.94786, 22.54009});
+        path.add(new double[] {113.94742, 22.54008});
+        path.add(new double[] {113.94742, 22.54008});
+        path.add(new double[] {113.94695, 22.54006});
+        path.add(new double[] {113.94695, 22.54006});
+        path.add(new double[] {113.9463, 22.54003});
+        path.add(new double[] {113.9463, 22.54003});
+        path.add(new double[] {113.94578, 22.54001});
+        path.add(new double[] {113.94578, 22.54001});
+        path.add(new double[] {113.94552, 22.54});
+        path.add(new double[] {113.94552, 22.54});
+        path.add(new double[] {113.94532, 22.53999});
+        path.add(new double[] {113.94532, 22.53999});
+        path.add(new double[] {113.94465, 22.53995});
+        path.add(new double[] {113.94465, 22.53995});
+        path.add(new double[] {113.94331, 22.53989});
+        path.add(new double[] {113.94331, 22.53989});
+        path.add(new double[] {113.94285, 22.53996});
     }
 
-    private Routine routine;
-
-//    private int currPosition = 0;
     private int currPosition = 0;
-    private float[] points;
-
-    float[] eyePosition = new float[] {0,0,0.3f};
-    float[] target = new float[]{0.5f,.5f,0};
+//    private int currPosition = 5;
 
     @Override
     protected void onStart() {
@@ -1180,108 +1172,33 @@ public class DrawRoudActivity extends OpenGLESActivity {
 //        routine = new Routine(point.x, point.y);
 
 
-//        mGlSurfaceView.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                mGlSurfaceView.requestRender();
-//
-//                if (currPosition < path.size() - 10) {
-//                    mGlSurfaceView.postDelayed(this, 500);
-//                }
-//            }
-//        }, 500);
+        mGlSurfaceView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mGlSurfaceView.requestRender();
+
+                if (currPosition < path.size() - 10) {
+                    mGlSurfaceView.postDelayed(this, 500);
+                }
+            }
+        }, 500);
     }
 
-    private DrawRoute drawRoute = new DrawRoute();
+    private DrawRoute2D drawRoute = new DrawRoute2D();
 
     @Override
     public void DrawScene(GL10 gl) {
         super.DrawScene(gl);
 
-        gl.glLoadIdentity();
         antiSmooth(gl);
 
-        GLU.gluLookAt(gl,
-                eyePosition[0],eyePosition[1], eyePosition[2],
-                target[0],target[1],0,
-                0,0,1);
-
-
-        Log.e("sss", String.format("curr:"+currPosition+ "/"+path.size()+"  look at:%f,%f,%f --->%f,%f,%f", eyePosition[0], eyePosition[1], eyePosition[2],
-                target[0], target[1],target[2]));
-
-
-
-
         drawRoute.setPathPoints(path.subList(currPosition,  currPosition+6));
-        drawRoute.draw(gl);
-//        drawRoute.drawParts(gl);
-//        drawRoute.drawroute(gl);
+        drawRoute.drawroute(gl);
 
 
-
-//        points = routeMapToCoordinates(path.subList(currPosition, currPosition+6));
-//        routine.setPath(points);
-
-//        double angle = getEyeDirectionAngle(points[3], points[4]);
-
-//        gl.glPushMatrix();
-//        gl.glTranslatef(0.3f,0.3f,0);
-
-
-//        routine.drawArrow(gl, 0.03f);
-//        routine.drawArrow(gl, 0.0525f);
-////        routine.drawArrow(gl, 0.15f);
-//
-//        gl.glRotatef((float)angle, 0,0,1);
-
-//        gl.glPushMatrix();
-//        gl.glTranslatef(-0.1f, -0.2f, 0);
-//        routine.draw(gl);
-//        gl.glPopMatrix();
-////
-//        gl.glPushMatrix();
-//        gl.glTranslatef(0.1f, 0.2f, 0);
-//        routine.draw(gl);
-//        gl.glPopMatrix();
-
-//        gl.glPopMatrix();
-
-
+        Log.e("ss", "current:"+currPosition);
         currPosition ++;
     }
-
-    private double getEyeDirectionAngle(double x, double y) {
-
-//        Log.e("sss", "origin:"+points[0]+"  "  +points[1] + " x:"+x+ "  "+y);
-
-        double cos = (target[0] * x + target[1] * y)
-                / Math.sqrt((x * x + y * y) * (target[0] * target[0] + target[1] * target[1]));
-        double angle = Math.round(Math.toDegrees(Math.acos(cos)));
-
-//        double axb = target[0] * y - x * target[1];
-        double axb = x * target[1] - target[0] * y;
-        if (axb <0) {
-            angle *= -1;
-        }
-//        Log.e("sss", "index:"+ currPosition+"    angle:"+angle+ " cos:"+cos);
-        return angle;
-    }
-
-    private float[] routeMapToCoordinates(final List<double[]> route) {
-        float[] points = new float[route.size() * 3];
-
-        int idx = 0;
-        double[] origin = route.get(0);
-        for (double[] point : route) {
-            points[idx++] = (float) (point[0] - origin[0]) * 10000;
-            points[idx++] = (float) (point[1] - origin[1]) * 10000;
-            points[idx++] = 0f;
-        }
-//        printArray(points, 3);
-        return points;
-    }
-
 
     private List<double[]> mapToCoordinatesInserted(final List<double[]> route) {
         List<double[]> inserted = new ArrayList<>();
@@ -1296,6 +1213,7 @@ public class DrawRoudActivity extends OpenGLESActivity {
         filterDuplicatedPoints(inserted);
         return inserted;
     }
+
     private List<double[]> routePointInsert(double[] first, double[] second) {
         double distance = getDisanceBetweenPoints(first, second);
 

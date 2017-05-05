@@ -33,6 +33,7 @@
         <activity android:name=".demos.DrawRoutineActivity" />
         <activity android:name=".demos.DrawFirstSightActivity" />
         <activity android:name=".demos.DrawRoudActivity"></activity>
+        <activity android:name=".demos.DrawRoud2DActivity"></activity>
     </application>
 
 </manifest>

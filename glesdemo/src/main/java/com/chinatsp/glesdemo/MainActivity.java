@@ -17,6 +17,7 @@ import com.chinatsp.glesdemo.demos.DrawFirstSightActivity;
 import com.chinatsp.glesdemo.demos.DrawIcosahedronActivity;
 import com.chinatsp.glesdemo.demos.DrawLineActivity;
 import com.chinatsp.glesdemo.demos.DrawPointActivity;
+import com.chinatsp.glesdemo.demos.DrawRoud2DActivity;
 import com.chinatsp.glesdemo.demos.DrawRoudActivity;
 import com.chinatsp.glesdemo.demos.DrawSolarSystemActivity;
 import com.chinatsp.glesdemo.demos.DrawSphereActivity;
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
             "routine",
             "First sight",
             "draw route before",
+            "2d draw route before",
     };
     private void initListView() {
         lvDemos = (ListView)findViewById(R.id.lv_demos);
@@ -116,6 +118,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 15:
                         startActivity(new Intent(MainActivity.this, DrawRoudActivity.class));
+                        break;
+                    case 16:
+                        startActivity(new Intent(MainActivity.this, DrawRoud2DActivity.class));
                         break;
                 }
 
