@@ -1,5 +1,8 @@
 package com.chinatsp.glesdemo.demos;
 
+import android.graphics.Point;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.chinatsp.glesdemo.demos.Model.DrawRoute2D;
@@ -1166,25 +1169,46 @@ public class DrawRoud2DActivity extends OpenGLESActivity {
         path = mapToCoordinatesInserted(path);
 
 
-//        Point point = new Point();
-//        getWindow().getWindowManager().getDefaultDisplay().getSize(point);
-//
+        Point point = new Point();
+        getWindow().getWindowManager().getDefaultDisplay().getSize(point);
+        drawRoute = new DrawRoute2D();
+        drawRoute.setSize(point.x, point.y);
+        drawRoute.setSaveImage(false);
+
+
 //        routine = new Routine(point.x, point.y);
 
+//        mGlSurfaceView.setVisibility(View.INVISIBLE);
+//        mGlSurfaceView.getHolder().setFormat(PixelFormat.TRANSPARENT);
 
-        mGlSurfaceView.postDelayed(new Runnable() {
+        Handler handler = new Handler() {
             @Override
-            public void run() {
-                mGlSurfaceView.requestRender();
+            public void handleMessage(Message msg) {
+                if (msg.what == 0) {
+                    mGlSurfaceView.requestRender();
 
-                if (currPosition < path.size() - 10) {
-                    mGlSurfaceView.postDelayed(this, 500);
+                    if (currPosition < path.size() - 10) {
+                        this.sendEmptyMessageDelayed(0, 500);
+                    }
                 }
             }
-        }, 500);
+        };
+
+        handler.sendEmptyMessage(0);
+
+//        mGlSurfaceView.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                mGlSurfaceView.requestRender();
+//
+//                if (currPosition < path.size() - 10) {
+//                    mGlSurfaceView.postDelayed(this, 500);
+//                }
+//            }
+//        }, 500);
     }
 
-    private DrawRoute2D drawRoute = new DrawRoute2D();
+    private DrawRoute2D drawRoute;
 
     @Override
     public void DrawScene(GL10 gl) {
