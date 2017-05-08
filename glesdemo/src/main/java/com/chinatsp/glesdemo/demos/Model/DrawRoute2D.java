@@ -2,6 +2,7 @@ package com.chinatsp.glesdemo.demos.Model;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.opengl.GLU;
 import android.os.Environment;
 import android.util.Log;
 
@@ -41,12 +42,21 @@ public class DrawRoute2D {
     public void drawroute(GL10 gl) {
 
         gl.glLoadIdentity();
-        gl.glTranslatef(0,-0.5f,-1.5f);
+
+        GLU.gluLookAt(gl, 0,0,0.5f,
+                0,0.5f,0,
+                0,0,1);
+
+//        gl.glTranslatef(0,-0.5f,-1.5f);
 
 
         gl.glColor4f(1f, 1f,1f,1f);
         gl.glPointSize(20f);
         gl.glLineWidth(5f);
+
+        gl.glTranslatef(0f, 0.3f, 0);
+
+
 
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
 
@@ -55,9 +65,18 @@ public class DrawRoute2D {
         double angle = getEyeDirectionAngle(points[3], points[4]);
         gl.glRotatef((float)angle, 0,0,1);
 
+
+
+
+
         //draw route
 //        drawRouteLine(gl, points);
 
+
+//        gl.glTranslatef(-0.1f, -0.1f, 0);
+//        drawRouteLine(gl, points);
+//        gl.glTranslatef(0.2f, 0.2f, 0);
+//        drawRouteLine(gl, points);
 
         //draw arrow
         int i=0;
@@ -102,7 +121,8 @@ public class DrawRoute2D {
     private int acnt = 0;
     private float size = 0.05f;
     private float scale = 1f;
-    private float scaleFactor = 0.1f;
+//    private float scaleFactor = 0.1f;
+    private float scaleFactor = 0;
     private void drawArrow(GL10 gl, float startX, float startY, float endX, float endY) {
 
         float deltaX = endX - startX;
