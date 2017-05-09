@@ -43,7 +43,7 @@ public class DrawRoute2D {
 
         gl.glLoadIdentity();
 
-        GLU.gluLookAt(gl, 0,0,0.5f,
+        GLU.gluLookAt(gl, 0,0,0.45f,
                 0,0.5f,0,
                 0,0,1);
 
@@ -82,7 +82,7 @@ public class DrawRoute2D {
         int i=0;
         acnt = 0;
         for (; i<points.length - 5; i+=3) {
-            drawArrow(gl, points[i], points[i + 1], points[i + 3], points[i + 4]);
+            drawArrows(gl, points[i], points[i + 1], points[i + 3], points[i + 4]);
         }
 
 
@@ -99,11 +99,20 @@ public class DrawRoute2D {
      * 传入向量与正上方向量比较：
      * 向量夹角为正是逆时针方向转动，负为顺时针方向转动
      */
-    private float getArrowAngle(float startX, float startY,
-                                float endX, float endY) {
+    private float getArrowAngleToAxisY(float startX, float startY,
+                                       float endX, float endY) {
 
         double angle = calculateVectorAngle(0-0, 0.5-0, endX - startX, endY - startY);
-//        Log.e("sss", String.format("getArrowAngle: %f,%f--%f,%f--%f,%f--%f,%f=====>%f"
+//        Log.e("sss", String.format("getArrowAngleToAxisY: %f,%f--%f,%f--%f,%f--%f,%f=====>%f"
+//                ,  0f, 0f, 0f, 0.5f, startX,startY, endX,endY, angle));
+        return (float) angle;
+    }
+
+    private float getArrowAngleToFirstLine(float startX, float startY,
+                                float endX, float endY) {
+
+        double angle = calculateVectorAngle(points[3]-0, points[4]-0, endX - startX, endY - startY);
+//        Log.e("sss", String.format("getArrowAngleToAxisY: %f,%f--%f,%f--%f,%f--%f,%f=====>%f"
 //                ,  0f, 0f, 0f, 0.5f, startX,startY, endX,endY, angle));
         return (float) angle;
     }
@@ -120,16 +129,18 @@ public class DrawRoute2D {
 
     private int acnt = 0;
     private float size = 0.05f;
-    private float scale = 1f;
-//    private float scaleFactor = 0.1f;
-    private float scaleFactor = 0;
+    private float scale = 1.3f;
+    private float scaleFactor = 0.05f;
+//    private float scaleFactor = 0;
+
+
     private void drawArrow(GL10 gl, float startX, float startY, float endX, float endY) {
 
         float deltaX = endX - startX;
         float deltaY = endY - startY;
 
         gl.glPushMatrix();
-        float angle = getArrowAngle(startX, startY, endX, endY);
+        float angle = getArrowAngleToAxisY(startX, startY, endX, endY);
 
         do {
             gl.glPushMatrix();
@@ -157,6 +168,48 @@ public class DrawRoute2D {
             gl.glPopMatrix();
 
         }while (false);
+        gl.glPopMatrix();
+    }
+    private void drawArrows(GL10 gl, float startX, float startY, float endX, float endY) {
+        
+        gl.glPushMatrix();
+        float angle = getArrowAngleToAxisY(startX, startY, endX, endY);
+
+        float angle2 = getArrowAngleToFirstLine(startX, startY, endX, endY);
+
+        Log.e("ss", "angle1:"+angle+ " angle2:"+angle2);
+
+        double distance = getDistance(startX,startY, endX, endY);
+        int arrowUnits = (int) Math.ceil(distance/0.07f);
+
+
+        float deltaX = (endX - startX) /arrowUnits;
+        float deltaY = (endY - startY) / arrowUnits;
+
+        int arrLeft = 0;
+
+        if(Math.abs(Math.abs(angle2)) > 30) {
+            arrLeft = 1;
+        }
+
+//        if (acnt >0) {
+//            arrLeft = 1;
+//        }
+        do {
+            gl.glPushMatrix();
+            gl.glTranslatef(startX + deltaX * arrLeft, startY + deltaY * arrLeft, 0);
+            gl.glRotatef(angle, 0, 0, 1);
+            float scales = scale - acnt * scaleFactor;
+            if (scales <= 0 || acnt >= 15) {
+                gl.glPopMatrix();
+                break;
+            }
+            drawArrowLine(gl, getArrowPoints(scales));
+            acnt++;
+            gl.glPopMatrix();
+
+            arrLeft ++;
+        }while (arrLeft < arrowUnits);
         gl.glPopMatrix();
     }
 
@@ -233,6 +286,11 @@ public class DrawRoute2D {
 //        printArray(points, 3);
         return points;
     }
+
+    private double getDistance(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(Math.pow(x1-x2, 2) + Math.pow(y1-y2, 2));
+    }
+
 
     private void printArray(float[] data, int unitSize) {
         System.out.println("print array:");
