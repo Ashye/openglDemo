@@ -1195,17 +1195,6 @@ public class DrawRoud2DActivity extends OpenGLESActivity {
         };
 
         handler.sendEmptyMessage(0);
-
-//        mGlSurfaceView.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                mGlSurfaceView.requestRender();
-//
-//                if (currPosition < path.size() - 10) {
-//                    mGlSurfaceView.postDelayed(this, 500);
-//                }
-//            }
-//        }, 500);
     }
 
     private DrawRoute2D drawRoute;
@@ -1214,6 +1203,8 @@ public class DrawRoud2DActivity extends OpenGLESActivity {
     public void DrawScene(GL10 gl) {
         super.DrawScene(gl);
 
+        long start = System.currentTimeMillis();
+
         antiSmooth(gl);
 
         drawRoute.setPathPoints(path.subList(currPosition,  currPosition+4));
@@ -1221,6 +1212,10 @@ public class DrawRoud2DActivity extends OpenGLESActivity {
 
 
         Log.e("ss", "current:"+currPosition+"/"+path.size());
+        long end = System.currentTimeMillis();
+
+        Log.e("ss", "time duration:"+(end - start));
+
         currPosition ++;
     }
 
