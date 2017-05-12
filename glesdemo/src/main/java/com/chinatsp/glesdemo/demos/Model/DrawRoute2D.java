@@ -105,20 +105,20 @@ public class DrawRoute2D {
      * 传入向量与正上方向量比较：
      * 向量夹角为正是逆时针方向转动，负为顺时针方向转动
      */
-    private float getArrowAngleToAxisY(float startX, float startY,
-                                       float endX, float endY) {
+    private float getLineAngleToAxisY(float startX, float startY,
+                                      float endX, float endY) {
 
         double angle = calculateVectorAngle(0-0, 0.5-0, endX - startX, endY - startY);
-//        Log.e("sss", String.format("getArrowAngleToAxisY: %f,%f--%f,%f--%f,%f--%f,%f=====>%f"
+//        Log.e("sss", String.format("getLineAngleToAxisY: %f,%f--%f,%f--%f,%f--%f,%f=====>%f"
 //                ,  0f, 0f, 0f, 0.5f, startX,startY, endX,endY, angle));
         return (float) angle;
     }
 
-    private float getArrowAngleToFirstLine(float startX, float startY,
-                                float endX, float endY) {
+    private float getLineAngleToFirstLine(float startX, float startY,
+                                          float endX, float endY) {
 
         double angle = calculateVectorAngle(points[3]-0, points[4]-0, endX - startX, endY - startY);
-//        Log.e("sss", String.format("getArrowAngleToAxisY: %f,%f--%f,%f--%f,%f--%f,%f=====>%f"
+//        Log.e("sss", String.format("getLineAngleToAxisY: %f,%f--%f,%f--%f,%f--%f,%f=====>%f"
 //                ,  0f, 0f, 0f, 0.5f, startX,startY, endX,endY, angle));
         return (float) angle;
     }
@@ -146,7 +146,7 @@ public class DrawRoute2D {
         float deltaY = endY - startY;
 
         gl.glPushMatrix();
-        float angle = getArrowAngleToAxisY(startX, startY, endX, endY);
+        float angle = getLineAngleToAxisY(startX, startY, endX, endY);
 
         do {
             gl.glPushMatrix();
@@ -179,9 +179,9 @@ public class DrawRoute2D {
     private void drawArrows(GL10 gl, float startX, float startY, float endX, float endY) {
         
         gl.glPushMatrix();
-        float angle = getArrowAngleToAxisY(startX, startY, endX, endY);
+        float angle = getLineAngleToAxisY(startX, startY, endX, endY);
 
-        float angle2 = getArrowAngleToFirstLine(startX, startY, endX, endY);
+        float angle2 = getLineAngleToFirstLine(startX, startY, endX, endY);
 
         Log.e("ss", "angle1:"+angle+ " angle2:"+angle2);
 
