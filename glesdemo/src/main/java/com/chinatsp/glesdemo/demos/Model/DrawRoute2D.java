@@ -54,6 +54,8 @@ public class DrawRoute2D {
         gl.glPointSize(20f);
         gl.glLineWidth(5f);
 
+//        gl.glTranslatef(0,0, -5);
+//        gl.glTranslatef(0f, 0.5f, 0);
         gl.glTranslatef(0f, 0.3f, 0);
 
 
@@ -90,6 +92,10 @@ public class DrawRoute2D {
         gl.glFlush();
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 
+        //save image
+        if (saveImage) {
+            saveBitmap(gl);
+        }
     }
 
 
@@ -245,12 +251,6 @@ public class DrawRoute2D {
         gl.glFlush();
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
 
-
-
-        //save image
-        if (saveImage) {
-            saveBitmap(gl);
-        }
     }
 
     private double getEyeDirectionAngle(double x, double y) {
@@ -310,15 +310,15 @@ public class DrawRoute2D {
     public void setSize(int width, int height) {
         this.width = width;
         this.height = height;
-        imageWidth = width;
-        imageHeight = height;
+//        imageWidth = width;
+//        imageHeight = height;
         imageBuffer = IntBuffer.allocate(imageWidth * imageHeight);
     }
 
 
     private int width;
     private int height;
-    private int imageWidth = 250;
+    private int imageWidth = 200;
     private int imageHeight = 400;
     //保存图片
     private IntBuffer imageBuffer;
@@ -331,7 +331,7 @@ public class DrawRoute2D {
     private void saveBitmap(GL10 gl) {
         imageBuffer.position(0);
 
-        gl.glReadPixels(width/2 - imageWidth/2, height /2 - imageHeight/2, imageWidth, imageHeight, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, imageBuffer);
+        gl.glReadPixels(width/2 - imageWidth/2, height /2 - 50 , imageWidth, imageHeight, GL10.GL_RGBA, GL10.GL_UNSIGNED_BYTE, imageBuffer);
 
         imageBuffer.position(0);
         int pix[] = new int[imageWidth*imageHeight];
