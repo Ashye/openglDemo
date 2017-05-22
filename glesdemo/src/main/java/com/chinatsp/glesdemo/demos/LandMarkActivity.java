@@ -2011,7 +2011,7 @@ public class LandMarkActivity extends OpenGLESActivity {
 //        distance -= mDistance;
 //        if (distance < 10f) {
 //            currPosition++;
-//            distance = getDisanceBetweenPoints(path.get(currPosition), path.get(currPosition+1));
+//            distance = getEarthDistanceBetweenPoints(path.get(currPosition), path.get(currPosition+1));
 //
 //            mDistance = 0;
 //        }

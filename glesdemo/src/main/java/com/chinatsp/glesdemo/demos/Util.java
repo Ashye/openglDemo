@@ -1,5 +1,10 @@
 package com.chinatsp.glesdemo.demos;
 
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by zhangwei on 2017/4/13.
  */
@@ -116,4 +121,213 @@ public class Util {
         }
         return dOrient;
     }
+
+
+
+
+
+    /**
+     * points method
+     */
+    public static void filterDuplicatedPoints(List<double[]> path) {
+
+//        printAllPoints();
+        List<double[]> deleted = new ArrayList<>();
+        double[] first;
+        double[] second;
+
+        for (int i = 1; i < path.size(); i++) {
+            first = path.get(i - 1);
+            second = path.get(i);
+            if (Math.abs(first[0] - second[0]) < Double.MIN_VALUE
+                    && Math.abs(first[1] - second[1]) < Double.MIN_VALUE) {
+//                path.remove(i);
+                deleted.add(path.get(i));
+            }
+        }
+        path.removeAll(deleted);
+        Log.e("sssss ", "--------------------------------------------------------------------------");
+//        printAllPoints();
+    }
+
+    public static double getEarthDistanceBetweenPoints(double[] first, double[] second) {
+        double distance = Util.getrelativeDistance(first[0], first[1], second[0], second[1]);
+        return distance;
+    }
+
+    public static List<double[]> mapToCoordinatesInserted(final List<double[]> route) {
+        List<double[]> inserted = new ArrayList<>();
+
+        double[] first;
+        double[] second;
+        for (int idx = 0; idx < route.size() -2; idx ++) {
+            first = route.get(idx);
+            second = route.get(idx+1);
+            inserted.addAll(routePointInsert(first, second));
+        }
+        filterDuplicatedPoints(inserted);
+        return inserted;
+    }
+
+    public static List<double[]> routePointInsert(double[] first, double[] second) {
+        double distance = getEarthDistanceBetweenPoints(first, second);
+
+        List<double[]> routePoints = new ArrayList<>();
+
+        if (distance > 5) {
+            int count = (int) Math.ceil(distance / 5);
+            double stepX = (second[0] - first[0]) / count;
+            double stepY = (second[1] - first[1]) / count;
+
+            for (int i=0; i <= count; i++) {
+                routePoints.add(new double[] {first[0] + stepX * i, first[1] + stepY * i});
+            }
+
+        }else {
+            routePoints.add(first);
+            routePoints.add(second);
+        }
+
+        return routePoints;
+    }
+
+    public static float[] routeMapToCoordinates(final List<double[]> route) {
+        float[] points = new float[route.size() * 3];
+
+        int idx = 0;
+        double[] origin = route.get(0);
+        for (double[] point : route) {
+            points[idx++] = (float) (point[0] - origin[0]) * 10000;
+            points[idx++] = (float) (point[1] - origin[1]) * 10000;
+            points[idx++] = 0f;
+        }
+//        printArray(points, 3);
+        return points;
+    }
+
+
+
+    /**
+     * vector method
+     */
+    public static double calculateVectorAngle(double x1, double y1, double x2, double y2) {
+
+        double cos = (x1 * x2 + y1 * y2) /
+                (Math.sqrt(x1*x1 +y1*y1) * Math.sqrt(x2*x2 + y2*y2));
+        double angle = Math.round(Math.toDegrees(Math.acos(cos)));
+
+        double axb = x1 * y2 - x2 * y1;
+        if (axb <0) {
+            angle = - Math.abs(angle);
+        }else {
+            angle = Math.abs(angle);
+        }
+//        Log.e("sss", "index:    angle:"+angle+ " cos:"+cos);
+        return angle;
+    }
+
+    public static float[] getRotatedPoints(float a, float b, float angle) {
+        float[] points = new float[2];
+        if (angle >0) {
+            points[0] = (float)(a * Math.cos(Math.toRadians(angle)) - b * Math.sin(Math.toRadians(angle)));
+            points[1] = (float)(a * Math.sin(Math.toRadians(angle)) + b * Math.cos(Math.toRadians(angle)));
+        }else {
+            points[0] = (float)(a * Math.cos(Math.toRadians(angle)) + b * Math.sin(Math.toRadians(angle)));
+            points[1] = (float)(a * Math.sin(Math.toRadians(angle)) + b * Math.cos(Math.toRadians(angle)));
+        }
+        return points;
+    }
+
+    public static double getDistance(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(Math.pow(x1-x2, 2) + Math.pow(y1-y2, 2));
+    }
+
+
+    /**
+     * 贝塞尔曲线点
+     */
+
+    /**
+     * 只显示前 100 米
+     * @param paths
+     * @return
+     */
+    public static float[] getBezierPoints(List<double[]> paths) {
+        List<double[]> temp = new ArrayList<>();
+        temp.add(paths.get(0));
+
+        double len = 0;
+        List<double[]> sub;
+        for (int i=0; i< paths.size() -2; i++) {
+            sub = getBezierPointsV2(paths.get(i), paths.get(i+1), paths.get(i+2));
+
+            len += Util.getEarthDistanceBetweenPoints(temp.get(temp.size()-1), sub.get(0));
+            temp.add(sub.get(0));
+            if (len > 100) {
+                break;
+            }
+
+            for (int j=0; j< sub.size()-1 ; j++) {
+                len += Util.getEarthDistanceBetweenPoints(sub.get(j), sub.get(j+1));
+                temp.add(sub.get(j+1));
+                if (len > 100) {
+                    break;
+                }
+            }
+        }
+
+        if (len < 100) {
+            temp.add(paths.get(paths.size() - 1));
+        }
+
+        return routeMapToCoordinates(temp);
+    }
+    /**
+     * 二次方程
+     */
+    public static List<double[]> getBezierPointsV2(double[] point0, double[] point1, double[] point2) {
+        /**
+         * 临近弯点，使用离弯点 1/10 的点为开始结束点，尽量逼近路径
+         */
+        double[] p0 = new double[] {
+                point0[0] + (point1[0] - point0[0]) * 0.8,
+                point0[1] + (point1[1] - point0[1]) * 0.8,
+        };
+        double[] p2 = new double[] {
+                point1[0] + (point2[0] - point1[0]) * 0.2,
+                point1[1] + (point2[1] - point1[1]) * 0.2,
+        };
+
+
+        List<double[]> temp = new ArrayList<>();
+
+        double t = 0;
+        for (; t<=1; t += 0.1) {
+            double a1 = Math.pow(1 - t, 2);
+            double a2 = 2 * t * (1 - t);
+            double a3 = Math.pow(t, 2);
+
+            double x = a1 * p0[0] + a2 * point1[0] + a3 * p2[0];
+            double y = a1 * p0[1] + a2 * point1[1] + a3 * p2[1];
+            temp.add(new double[]{x, y});
+        }
+        return temp;
+    }
+
+
+
+
+    public static void printArray(float[] data, int unitSize) {
+        System.out.println("print array:");
+
+        for (int i = 0; i < data.length; i++) {
+            System.out.print(" " + data[i]);
+            if ((i + 1) % unitSize == 0) {
+                System.out.println();
+            }
+        }
+
+        System.out.println();
+    }
+
 }
