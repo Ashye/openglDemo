@@ -77,11 +77,20 @@ public class DrawRoute2D {
 
         //draw bezier line
         float[] points = Util.getBezierPoints(pathPoints);
-        drawRouteLine(gl, points);
+//        drawRouteLine(gl, points);
 //        drawLines(gl, points, 10, false);
 //        drawLines(gl, Util.getBezierPointsV2(pathPoints.get(0), pathPoints.get(1), pathPoints.get(2)), 10, false);
 //        drawLines(gl, Util.getBezierPointsV2(pathPoints.get(1), pathPoints.get(2), pathPoints.get(3)), 10, false);
 
+
+        int id = 0;
+        lefts.clear();
+        rights.clear();
+        for (; id< points.length - 5; id+=3) {
+//            calculatePathPoints(gl, points[id], points[id + 1], points[id + 3], points[id + 4]);
+            drawPath1(gl, points[id], points[id + 1], points[id + 3], points[id + 4]);
+
+        }
 
         //draw route
 //        drawRouteLine(gl, points);
@@ -149,7 +158,7 @@ public class DrawRoute2D {
      * @param scale
      * @return
      */
-    private static final float pathSize = 0.05f;
+    private static final float pathSize = 0.01f;
     private void drawPath(GL10 gl, float startX, float startY, float endX, float endY) {
 
         double leftSX = 0;
@@ -203,9 +212,13 @@ public class DrawRoute2D {
     private void drawPath1(GL10 gl, float startX, float startY, float endX, float endY) {
 //        calculatePathPoints(gl, startX, startY, endX, endY);
 
-        calculateCornerPoints(gl, startX, startY, endX, endY);
+//        calculateCornerPoints(gl, startX, startY, endX, endY);
+        calculatePathPoints(gl, startX, startY, endX, endY);
         float[] points = getPoints(rights);
-        drawLines(gl, points, 10, true);
+        drawLines(gl, points, 10, false);
+
+        points = getPoints(lefts);
+        drawLines(gl, points, 10, false);
 
 //        float[] points = getPoints(lefts);
 //        drawLines(gl, points, 10, false);
@@ -225,11 +238,14 @@ public class DrawRoute2D {
     private void calculatePathPoints(GL10 gl, float startX, float startY, float endX, float endY) {
         float angle = getLineAngleToAxisY(startX, startY, endX, endY);
 
+//        Log.e("ss", "anlge: "+angle);
+
+
         float a = endX - startX;
         float b = endY - startY;
 
-        float[] pointsLeft = Util.getRotatedPoints(-pathSize, 0, -angle);
-        float[] pointsRight = Util.getRotatedPoints(pathSize, 0, -angle);
+        float[] pointsLeft = Util.getRotatedPoints(-pathSize, 0, angle);
+        float[] pointsRight = Util.getRotatedPoints(pathSize, 0, angle);
 
         int count = 10;
 
@@ -241,15 +257,17 @@ public class DrawRoute2D {
         float rx = pointsRight[0] + startX + i * a/count;
         float ry = pointsRight[1] + startY + i * b/ count;
 
-//        lefts.add(new float[]{lx,ly});
-//        rights.add(new float[]{rx,ry});
+        lefts.add(new float[]{lx,ly});
+        rights.add(new float[]{rx,ry});
 
-        float[] points = {
-                lx, ly, 0,
-                rx, ry, 0
-        };
+//        float[] points = {
+//                lx, ly, 0,
+//                rx, ry, 0
+//        };
 
-        drawLines(gl, points, 10, true);
+//        Log.e("ss", String.format("%f,%f; %f,%f", lx, ly, rx, ry));
+
+//        drawLines(gl, points, 10, false);
     }
 
     /**
@@ -289,7 +307,7 @@ public class DrawRoute2D {
 
         }
 
-        Log.e("ssss", "rotate:"+angle);
+//        Log.e("ssss", "rotate:"+angle);
 
 
         r[0] += startX;

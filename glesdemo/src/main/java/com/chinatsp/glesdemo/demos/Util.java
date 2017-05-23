@@ -160,7 +160,7 @@ public class Util {
 
         double[] first;
         double[] second;
-        for (int idx = 0; idx < route.size() -2; idx ++) {
+        for (int idx = 0; idx < route.size() -1; idx ++) {
             first = route.get(idx);
             second = route.get(idx+1);
             inserted.addAll(routePointInsert(first, second));
@@ -289,13 +289,22 @@ public class Util {
         /**
          * 临近弯点，使用离弯点 1/10 的点为开始结束点，尽量逼近路径
          */
-        double[] p0 = new double[] {
-                point0[0] + (point1[0] - point0[0]) * 0.8,
-                point0[1] + (point1[1] - point0[1]) * 0.8,
-        };
+        double[] p0;
+        double dis = Util.getEarthDistanceBetweenPoints(point0, point1);
+        if (dis > 1) {
+            p0 = new double[]{
+                    point0[0] + (point1[0] - point0[0]) * 0.7 ,
+                    point0[1] + (point1[1] - point0[1]) * 0.7,
+            };
+        }else {
+            p0 = new double[]{
+                    point0[0] + (point1[0] - point0[0]) * 0.7 * dis ,
+                    point0[1] + (point1[1] - point0[1]) * 0.7 * dis,
+            };
+        }
         double[] p2 = new double[] {
-                point1[0] + (point2[0] - point1[0]) * 0.2,
-                point1[1] + (point2[1] - point1[1]) * 0.2,
+                point1[0] + (point2[0] - point1[0]) * 0.4,
+                point1[1] + (point2[1] - point1[1]) * 0.4,
         };
 
 
