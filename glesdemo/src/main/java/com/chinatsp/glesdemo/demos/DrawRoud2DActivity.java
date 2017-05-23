@@ -1080,21 +1080,21 @@ public class DrawRoud2DActivity extends OpenGLESActivity {
 
         path.add(new double[] {113.95398, 22.53655});
         path.add(new double[] {113.95399, 22.5364});
-//        path.add(new double[] {113.95399, 22.5364});
-//        path.add(new double[] {113.95399, 22.53632});
-//        path.add(new double[] {113.95399, 22.53632});
-//        path.add(new double[] {113.95403, 22.53631});
-//        path.add(new double[] {113.95403, 22.53631});
-//        path.add(new double[] {113.95403, 22.5364});
-//        path.add(new double[] {113.95403, 22.5364});
-//        path.add(new double[] {113.95402, 22.53665});
-//        path.add(new double[] {113.95402, 22.53665});
-//        path.add(new double[] {113.95401, 22.53684});
-//        path.add(new double[] {113.95401, 22.53684});
-//        path.add(new double[] {113.954, 22.53713});
-//        path.add(new double[] {113.954, 22.53713});
-//        path.add(new double[] {113.954, 22.53721});
-//        path.add(new double[] {113.954, 22.53721});
+        path.add(new double[] {113.95399, 22.5364});
+        path.add(new double[] {113.95399, 22.53632});
+        path.add(new double[] {113.95399, 22.53632});
+        path.add(new double[] {113.95403, 22.53631});
+        path.add(new double[] {113.95403, 22.53631});
+        path.add(new double[] {113.95403, 22.5364});
+        path.add(new double[] {113.95403, 22.5364});
+        path.add(new double[] {113.95402, 22.53665});
+        path.add(new double[] {113.95402, 22.53665});
+        path.add(new double[] {113.95401, 22.53684});
+        path.add(new double[] {113.95401, 22.53684});
+        path.add(new double[] {113.954, 22.53713});
+        path.add(new double[] {113.954, 22.53713});
+        path.add(new double[] {113.954, 22.53721});
+        path.add(new double[] {113.954, 22.53721});
 //        path.add(new double[] {113.95399, 22.53752});
 //        path.add(new double[] {113.95399, 22.53752});
 //        path.add(new double[] {113.95398, 22.53776});
@@ -1216,39 +1216,29 @@ public class DrawRoud2DActivity extends OpenGLESActivity {
         antiSmooth(gl);
 
 
+        List<double[]> subpath = getSubPath();
+
         //carPosition moving on
         emulateCardMoving(currPosition);
 
-        double carDis = Util.getEarthDistanceBetweenPoints(carPosition, path.get(currPosition+1));
-
-
-        double leftDis = Util.getEarthDistanceBetweenPoints(carPosition, path.get(path.size()-1));
-        Log.e("ss", "current carDis: "+carDis + "   totalleft:"+leftDis);
-
-        if (carDis < 0.3) {
+        //计算是不是要跳点
+        boolean movePoint = checkPointMove(subpath);
+        if (movePoint) {
             currPosition ++;
-
-            if (currPosition >= path.size()) {
-                isOver = true;
-                return;
-            }
-
         }
 
-        if (currPosition + stepSize >= path.size() ) {
-            stepSize = path.size() - currPosition;
+        //检查是不是行程结束
+        if (isOver) {
+            return;
         }
 
-        Log.e("ss", "current stepSize: "+ stepSize);
-        List<double[]> pathAtFront = path.subList(currPosition, currPosition+stepSize);
-//        List<double[]> pathAtFront = path;
-        if (pathAtFront.size() >0) {
-            if (pathAtFront.size() == 1) {
-                pathAtFront.add(0, carPosition);
+        if (subpath.size() >0) {
+            if (subpath.size() == 1) {
+                subpath.add(0, carPosition);
             } else {
-                pathAtFront.set(0, carPosition);
+                subpath.set(0, carPosition);
             }
-            drawRoute.setPathPoints(pathAtFront);
+            drawRoute.setPathPoints(subpath);
             drawRoute.drawroute(gl);
         }
 
@@ -1269,14 +1259,30 @@ public class DrawRoud2DActivity extends OpenGLESActivity {
     }
 
     private List<double[]> getSubPath() {
-
         //余下的点，不够步长时，有多少取多少
         if (currPosition + stepSize >= path.size()) {
             stepSize = path.size() - currPosition;
         }
-
+        Log.e("ss", "current stepSize: "+ stepSize);
         return path.subList(currPosition, currPosition+stepSize);
-
     }
 
+    private boolean checkPointMove(List<double[]> path) {
+        if (path.size() >0) {
+            int id = path.size() >1 ? 1 : 0;
+            double dis = Util.getEarthDistanceBetweenPoints(carPosition, path.get(id));
+            Log.e("ss", "current carDis: "+dis + "   totalleft:"+0);
+
+            if (dis < 0.8) {
+                if (path.size() ==1) {
+                    isOver = true;
+                }
+                return true;
+            }else {
+                return false;
+            }
+        }else {
+            return false;
+        }
+    }
 }

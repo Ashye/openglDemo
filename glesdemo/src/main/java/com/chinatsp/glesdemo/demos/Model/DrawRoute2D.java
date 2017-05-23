@@ -15,6 +15,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,8 @@ import javax.microedition.khronos.opengles.GL10;
  * Created by zhangwei on 2017/4/14.
  */
 
+
+// TODO: 2017/5/23  1. fillup ; 2. at the ending points 3. turning messed up
 public class DrawRoute2D {
 
 //    private double[] carPosition;
@@ -32,17 +35,12 @@ public class DrawRoute2D {
 
     private float[] points;
 
-
-//    public void setCarPosition(double[] carPosition) {
-//        this.carPosition = carPosition;
-//    }
-
     public void setPathPoints(final List<double[]> path) {
         pathPoints.clear();
         pathPoints.addAll(path);
         points = Util.routeMapToCoordinates(pathPoints);
 
-//        printArray(points, 3);
+        Util.printArray(points, 3);
     }
 
 
@@ -75,49 +73,46 @@ public class DrawRoute2D {
 
 
 
-        //draw bezier line
-        float[] points = Util.getBezierPoints(pathPoints);
-//        drawRouteLine(gl, points);
-//        drawLines(gl, points, 10, false);
-//        drawLines(gl, Util.getBezierPointsV2(pathPoints.get(0), pathPoints.get(1), pathPoints.get(2)), 10, false);
-//        drawLines(gl, Util.getBezierPointsV2(pathPoints.get(1), pathPoints.get(2), pathPoints.get(3)), 10, false);
+        if (pathPoints.size() >= 3) {
+            //draw bezier line
+            float[] points = Util.getBezierPoints(pathPoints);
 
+            int id = 0;
+            lefts.clear();
+            rights.clear();
+            for (; id < points.length - 5; id += 3) {
+                calculatePathPoints(gl, points[id], points[id + 1], points[id + 3], points[id + 4]);
+//                drawPath1(gl, points[id], points[id + 1], points[id + 3], points[id + 4]);
+            }
 
-        int id = 0;
-        lefts.clear();
-        rights.clear();
-        for (; id< points.length - 5; id+=3) {
-//            calculatePathPoints(gl, points[id], points[id + 1], points[id + 3], points[id + 4]);
+            id = 0;
             drawPath1(gl, points[id], points[id + 1], points[id + 3], points[id + 4]);
+        }else {
 
+            float[] points = Util.routeMapToCoordinates(pathPoints);
+
+            lefts.clear();
+            rights.clear();
+            lefts.add(new float[]{points[0] - pathSize, points[1], 0});
+            lefts.add(new float[]{points[3] - pathSize, points[4], 0});
+
+
+            rights.add(new float[]{points[0] + pathSize, points[1], 0});
+            rights.add(new float[]{points[3] + pathSize, points[4], 0});
+
+            drawPath1(gl, this.points[0], this.points[0 + 1], this.points[0 + 3], this.points[0 + 4]);
+//            gl.glTranslatef(-pathSize, 0, 0);
+//            drawRouteLine(gl, points);
+//            gl.glTranslatef(pathSize * 2, 0, 0);
+//            drawRouteLine(gl, points);
         }
-
-        //draw route
-//        drawRouteLine(gl, points);
-//        drawLines(gl, points, 10, false);
-
-//        gl.glTranslatef(-0.05f, 0, 0);
-//        drawRouteLine(gl, points);
-
-
-//        gl.glTranslatef(-0.1f, -0.1f, 0);
-//        drawRouteLine(gl, points);
-//        gl.glTranslatef(0.2f, 0.2f, 0);
-//        drawRouteLine(gl, points);
-
-        //draw arrow
-//        int i=3;
-//        acnt = 0;
-//        rights.clear();
-//        for (; i<points.length - 5; i+=3) {
-//////            drawArrows(gl, points[i], points[i + 1], points[i + 3], points[i + 4]);
-//            drawPath1(gl, points[i], points[i + 1], points[i + 3], points[i + 4]);
-//        }
 
 
         gl.glPopMatrix();
         gl.glFlush();
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+//        gl.glDisable(GL10.GL_BLEND);
+//        gl.glDisable();
 
         //save image
         if (saveImage) {
@@ -158,7 +153,7 @@ public class DrawRoute2D {
      * @param scale
      * @return
      */
-    private static final float pathSize = 0.01f;
+    private static final float pathSize = 0.05f;
     private void drawPath(GL10 gl, float startX, float startY, float endX, float endY) {
 
         double leftSX = 0;
@@ -210,21 +205,17 @@ public class DrawRoute2D {
     private List<float[]> rights = new ArrayList<>();
 
     private void drawPath1(GL10 gl, float startX, float startY, float endX, float endY) {
+
 //        calculatePathPoints(gl, startX, startY, endX, endY);
 
-//        calculateCornerPoints(gl, startX, startY, endX, endY);
-        calculatePathPoints(gl, startX, startY, endX, endY);
-        float[] points = getPoints(rights);
-        drawLines(gl, points, 10, false);
+//        float[] pointsLeft = getPoints(rights);
+//        drawLines(gl, points, 10, true);
+//
+//        float[] pointsRight = getPoints(lefts);
+//        drawLines(gl, points, 10, true);
 
-        points = getPoints(lefts);
-        drawLines(gl, points, 10, false);
-
-//        float[] points = getPoints(lefts);
-//        drawLines(gl, points, 10, false);
-
-//        points = getPoints(rights);
-//        drawLines(gl, points, 10, false);
+        getPaths(gl, lefts, rights);
+//        drawRect(gl, ps, 10, false);
     }
 
     /**
@@ -270,63 +261,6 @@ public class DrawRoute2D {
 //        drawLines(gl, points, 10, false);
     }
 
-    /**
-     * 计算等分角度点，需要考虑左转还是右转
-     * @return
-     */
-    private void calculateCornerPoints(GL10 gl, float startX, float startY, float endX, float endY) {
-
-        float angle = getLineAngleToAxisY(startX, startY, endX, endY);
-
-        int sign = -1;
-        if (angle <=0) {
-            sign = 1;
-        }
-
-        float[] r;
-        float a = 0;
-        float b = pathSize;
-
-
-        float angleValue = Math.abs(angle);
-        if (angleValue < Float.MIN_NORMAL || Math.abs(angleValue - 180) < Float.MIN_NORMAL) {
-            //x 变，y不变
-
-            r = new float[] {
-                0 + sign * b, 0
-            };
-
-        }else if (Math.abs(angleValue - 90) < Float.MIN_NORMAL) {
-            //x 不变，y 变
-            r = new float[] {
-                  0, 0 - sign * b
-            };
-        }else {
-            //x, y 都变
-            r = Util.getRotatedPoints(a, b, angle);
-
-        }
-
-//        Log.e("ssss", "rotate:"+angle);
-
-
-        r[0] += startX;
-        r[1] += startY;
-
-
-//        lefts.add(new float[]{startX, startY});
-//        lefts.add(new float[]{});
-        rights.add(new float[]{r[0], r[1]});
-        rights.add(new float[]{r[0] + endX - startX, r[1] + endY - startY});
-
-//        float[] points = {
-//                xs, ys, 0,
-//                xe, ye, 0
-//        };
-//
-//        drawLines(gl, points, 10, true);
-    }
-
     private float[] getPoints(List<float[]> list) {
         float[] points = new float[list.size() * 3];
         int idx = 0;
@@ -338,7 +272,62 @@ public class DrawRoute2D {
         return points;
     }
 
+    private void getPaths(GL10 gl, List<float[]> left, List<float[]> right) {
 
+        List<float[]> temp = new ArrayList<>();
+        temp.addAll(left);
+        temp.addAll(right);
+        float[] points = getPoints(temp);
+
+        short[] vs = new short[left.size() * 6];
+        short rightOffset = (short) left.size();
+        int idx = 0;
+        for (short i=0; i< left.size()-1; i++) {
+            vs[idx++] = i;
+            vs[idx++] = (short) (rightOffset +i);
+            vs[idx++] = (short)(i+1);
+
+            vs[idx++] = (short)(i+1);
+            vs[idx++] = (short)(rightOffset + i);
+            vs[idx++] = (short)(rightOffset + i +1);
+
+        }
+
+
+
+        ByteBuffer vbb = ByteBuffer.allocateDirect(points.length * 4);
+        vbb.order(ByteOrder.nativeOrder());
+        FloatBuffer vertexes = vbb.asFloatBuffer();
+        vertexes.put(points);
+        vertexes.position(0);
+
+        ByteBuffer obb = ByteBuffer.allocateDirect(points.length * 4);
+        obb.order(ByteOrder.nativeOrder());
+        ShortBuffer order = obb.asShortBuffer();
+        order.put(vs);
+        order.position(0);
+
+
+        gl.glColor4f(1f, 1f,1f,0.5f);
+        gl.glLineWidth(10);
+        gl.glPointSize(20);
+
+        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
+
+
+        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexes);
+//        gl.glDrawArrays(GL10.GL_TRIANGLES, 0, points.length/3);
+//        gl.glVertexPointer();
+        gl.glDrawElements(GL10.GL_TRIANGLES, vs.length, GL10.GL_UNSIGNED_SHORT, obb);
+
+        gl.glColor4f(1,0,0,0.2f);
+        if (false) {
+            gl.glDrawArrays(GL10.GL_POINTS, 0, points.length / 3);
+        }
+
+        gl.glFlush();
+        gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
+    }
 
 
     /**
