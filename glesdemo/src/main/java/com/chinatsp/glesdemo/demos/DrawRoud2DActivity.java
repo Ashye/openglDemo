@@ -1248,6 +1248,10 @@ public class DrawRoud2DActivity extends OpenGLESActivity {
         Log.e("ss", "time duration:"+(end - start));
     }
 
+    /**
+     * 模拟车前行
+     * @param currPosition
+     */
     private void emulateCardMoving(int currPosition) {
         if (currPosition < path.size() -1) {
             double[] start = path.get(currPosition);
@@ -1258,6 +1262,10 @@ public class DrawRoud2DActivity extends OpenGLESActivity {
         }
     }
 
+    /**
+     * 获取当前 stepSize 下点画路径
+     * @return
+     */
     private List<double[]> getSubPath() {
         //余下的点，不够步长时，有多少取多少
         if (currPosition + stepSize >= path.size()) {
@@ -1267,6 +1275,11 @@ public class DrawRoud2DActivity extends OpenGLESActivity {
         return path.subList(currPosition, currPosition+stepSize);
     }
 
+    /**
+     * 检查车是不是行到路径点，车于下一个路径点 距离 < 0.8 时，算到达
+     * @param path
+     * @return
+     */
     private boolean checkPointMove(List<double[]> path) {
         if (path.size() >0) {
             int id = path.size() >1 ? 1 : 0;
