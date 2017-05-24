@@ -155,6 +155,11 @@ public class Util {
         return distance;
     }
 
+    /**
+     * 以第一点为原点，构建所有点的相对坐标,如有必要，插入新点
+     * @param route
+     * @return
+     */
     public static List<double[]> mapToCoordinatesInserted(final List<double[]> route) {
         List<double[]> inserted = new ArrayList<>();
 
@@ -169,6 +174,12 @@ public class Util {
         return inserted;
     }
 
+    /**
+     * 两点之间大于 5米后，插点
+     * @param first
+     * @param second
+     * @return
+     */
     public static List<double[]> routePointInsert(double[] first, double[] second) {
         double distance = getEarthDistanceBetweenPoints(first, second);
 
@@ -191,6 +202,11 @@ public class Util {
         return routePoints;
     }
 
+    /**
+     * 以第一点为原点，构建所有点的相对坐标
+     * @param route
+     * @return
+     */
     public static float[] routeMapToCoordinates(final List<double[]> route) {
         float[] points = new float[route.size() * 3];
 
@@ -210,6 +226,14 @@ public class Util {
     /**
      * vector method
      */
+    /**
+     * 根据向量夹角公式，计算两向量间夹角
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     * @return
+     */
     public static double calculateVectorAngle(double x1, double y1, double x2, double y2) {
 
         double cos = (x1 * x2 + y1 * y2) /
@@ -226,6 +250,13 @@ public class Util {
         return angle;
     }
 
+    /**
+     * 根据坐标系旋转公式计算 向量A（a, b）旋转 angle 后的坐标
+     * @param a
+     * @param b
+     * @param angle
+     * @return
+     */
     public static float[] getRotatedPoints(float a, float b, float angle) {
         float[] points = new float[2];
         if (angle >0) {

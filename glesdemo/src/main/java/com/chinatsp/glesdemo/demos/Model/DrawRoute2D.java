@@ -67,6 +67,9 @@ public class DrawRoute2D {
 
         gl.glPushMatrix();
 
+        /**
+         * 转视角，以当前第一段线为正前方
+         */
         double angle = getEyeDirectionAngle(points[3], points[4]);
         gl.glRotatef((float)angle, 0,0,1);
 
@@ -82,13 +85,12 @@ public class DrawRoute2D {
             rights.clear();
             for (; id < points.length - 5; id += 3) {
                 calculatePathPoints(gl, points[id], points[id + 1], points[id + 3], points[id + 4]);
-//                drawPath1(gl, points[id], points[id + 1], points[id + 3], points[id + 4]);
             }
 
-            id = 0;
-            drawPath1(gl, points[id], points[id + 1], points[id + 3], points[id + 4]);
+            drawPath1(gl);
         }else {
 
+            //最后一段路
             float[] points = Util.routeMapToCoordinates(pathPoints);
 
             lefts.clear();
@@ -96,15 +98,10 @@ public class DrawRoute2D {
             lefts.add(new float[]{points[0] - pathSize, points[1], 0});
             lefts.add(new float[]{points[3] - pathSize, points[4], 0});
 
-
             rights.add(new float[]{points[0] + pathSize, points[1], 0});
             rights.add(new float[]{points[3] + pathSize, points[4], 0});
 
-            drawPath1(gl, this.points[0], this.points[0 + 1], this.points[0 + 3], this.points[0 + 4]);
-//            gl.glTranslatef(-pathSize, 0, 0);
-//            drawRouteLine(gl, points);
-//            gl.glTranslatef(pathSize * 2, 0, 0);
-//            drawRouteLine(gl, points);
+            drawPath1(gl);
         }
 
 
@@ -126,7 +123,7 @@ public class DrawRoute2D {
 
 
     /**
-     * 传入向量与正上方向量比较：
+     * 传入向量与正Y方向量比较：
      * 向量夹角为正是逆时针方向转动，负为顺时针方向转动
      */
     private float getLineAngleToAxisY(float startX, float startY,
@@ -138,73 +135,19 @@ public class DrawRoute2D {
         return (float) angle;
     }
 
-    private float getLineAngleToFirstLine(float startX, float startY,
-                                          float endX, float endY) {
-
-        double angle = Util.calculateVectorAngle(points[3]-0, points[4]-0, endX - startX, endY - startY);
-//        Log.e("sss", String.format("getLineAngleToAxisY: %f,%f--%f,%f--%f,%f--%f,%f=====>%f"
-//                ,  0f, 0f, 0f, 0.5f, startX,startY, endX,endY, angle));
-        return (float) angle;
-    }
-
 
     /**
      * draw path
-     * @param scale
-     * @return
+     */
+
+    /**
+     * 路宽度
      */
     private static final float pathSize = 0.05f;
-    private void drawPath(GL10 gl, float startX, float startY, float endX, float endY) {
-
-        double leftSX = 0;
-        double leftSY = 0;
-
-        double rightSX = 0;
-        double rightSY = 0;
-
-
-        float angle = getLineAngleToAxisY(startX, startY, endX, endY);
-
-        float a = endX - startX;
-        float b = endY - startY;
-
-//        if (angle <0) {
-            leftSX = startX + a - Math.cos(Math.toRadians(angle)) * pathSize /2;
-            leftSY = startY + b + Math.sin(Math.toRadians(angle)) * pathSize /2;
-
-            rightSX = startX + a + Math.cos(Math.toRadians(angle)) * pathSize /2;
-            rightSY = startY + b - Math.sin(Math.toRadians(angle)) * pathSize /2;
-//        }
-
-
-
-        float[] points = {
-                (float) leftSX, (float)leftSY, 0,
-                (float) leftSX + a, (float)leftSY + b, 0,
-                (float)rightSX + a , (float)rightSY + b, 0,
-                (float)rightSX, (float)rightSY, 0
-        };
-
-
-        gl.glPushMatrix();
-//        gl.glTranslatef(startX , startY, 0);
-//        gl.glRotatef(angle, 0, 0, 1);
-        drawLines(gl, points, 10, true);
-        gl.glPopMatrix();
-//
-//        gl.glPushMatrix();
-//        gl.glTranslatef(endX , endY, 0);
-//        gl.glRotatef(angle, 0, 0, 1);
-//        drawLines(gl, points, 10, false);
-//        gl.glPopMatrix();
-
-
-    }
-
     private List<float[]> lefts = new ArrayList<>();
     private List<float[]> rights = new ArrayList<>();
 
-    private void drawPath1(GL10 gl, float startX, float startY, float endX, float endY) {
+    private void drawPath1(GL10 gl) {
 
 //        calculatePathPoints(gl, startX, startY, endX, endY);
 
@@ -219,7 +162,7 @@ public class DrawRoute2D {
     }
 
     /**
-     * 计算垂直路径线点
+     * 计算路径点处的垂直路径线点
      * @param gl
      * @param startX
      * @param startY
@@ -261,6 +204,11 @@ public class DrawRoute2D {
 //        drawLines(gl, points, 10, false);
     }
 
+    /**
+     * 转化为 opengl 可用的数据格式
+     * @param list
+     * @return
+     */
     private float[] getPoints(List<float[]> list) {
         float[] points = new float[list.size() * 3];
         int idx = 0;
@@ -272,6 +220,12 @@ public class DrawRoute2D {
         return points;
     }
 
+    /**
+     *
+     * @param gl
+     * @param left
+     * @param right
+     */
     private void getPaths(GL10 gl, List<float[]> left, List<float[]> right) {
 
         List<float[]> temp = new ArrayList<>();
@@ -279,6 +233,7 @@ public class DrawRoute2D {
         temp.addAll(right);
         float[] points = getPoints(temp);
 
+        //将所有点分为三角形，定义各个三角形顶点顺序
         short[] vs = new short[left.size() * 6];
         short rightOffset = (short) left.size();
         int idx = 0;
@@ -329,116 +284,22 @@ public class DrawRoute2D {
         gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
     }
 
-
     /**
-     * draw arrow
-     * @param scale
-     * @return
+     * 画原始路径线
+     * @param gl
+     * @param points
      */
-    private float[] getArrowPoints(float scale) {
-        float[] points = {
-            -size* scale, 0,0,
-                0,size/2f*scale,0,
-                size*scale,0,0
-        };
-
-        return points;
-    }
-
-    private int acnt = 0;
-    private float size = 0.05f;
-    private float scale = 1.3f;
-    private float scaleFactor = 0.05f;
-//    private float scaleFactor = 0;
-
-
-    private void drawArrow(GL10 gl, float startX, float startY, float endX, float endY) {
-
-        float deltaX = endX - startX;
-        float deltaY = endY - startY;
-
-        gl.glPushMatrix();
-        float angle = getLineAngleToAxisY(startX, startY, endX, endY);
-
-        do {
-            gl.glPushMatrix();
-            gl.glTranslatef(startX, startY, 0);
-            gl.glRotatef(angle, 0, 0, 1);
-            float scales = scale - acnt * scaleFactor;
-            if (scales <= 0) {
-                gl.glPopMatrix();
-                break;
-            }
-            drawArrowLine(gl, getArrowPoints(scales));
-            acnt++;
-            gl.glPopMatrix();
-
-            gl.glPushMatrix();
-            gl.glTranslatef(startX + deltaX / 2, startY + deltaY / 2, 0);
-            gl.glRotatef(angle, 0, 0, 1);
-            scales = scale - acnt * scaleFactor;
-            if (scales <= 0) {
-                gl.glPopMatrix();
-                break;
-            }
-            drawArrowLine(gl, getArrowPoints(scales));
-            acnt++;
-            gl.glPopMatrix();
-
-        }while (false);
-        gl.glPopMatrix();
-    }
-    private void drawArrows(GL10 gl, float startX, float startY, float endX, float endY) {
-        
-        gl.glPushMatrix();
-        float angle = getLineAngleToAxisY(startX, startY, endX, endY);
-
-        float angle2 = getLineAngleToFirstLine(startX, startY, endX, endY);
-
-        Log.e("ss", "angle1:"+angle+ " angle2:"+angle2);
-
-        double distance = Util.getDistance(startX,startY, endX, endY);
-        int arrowUnits = (int) Math.ceil(distance/0.07f);
-
-
-        float deltaX = (endX - startX) /arrowUnits;
-        float deltaY = (endY - startY) / arrowUnits;
-
-        int arrLeft = 0;
-
-        if(Math.abs(Math.abs(angle2)) > 30) {
-            arrLeft = 1;
-        }
-
-//        if (acnt >0) {
-//            arrLeft = 1;
-//        }
-        do {
-            gl.glPushMatrix();
-            gl.glTranslatef(startX + deltaX * arrLeft, startY + deltaY * arrLeft, 0);
-            gl.glRotatef(angle, 0, 0, 1);
-            float scales = scale - acnt * scaleFactor;
-            if (scales <= 0 || acnt >= 15) {
-                gl.glPopMatrix();
-                break;
-            }
-            drawArrowLine(gl, getArrowPoints(scales));
-            acnt++;
-            gl.glPopMatrix();
-
-            arrLeft ++;
-        }while (arrLeft < arrowUnits);
-        gl.glPopMatrix();
-    }
-
-    private void drawArrowLine(GL10 gl, float[] points) {
-        drawLines(gl, points, 10, false);
-    }
-
     private void drawRouteLine(GL10 gl, float[] points) {
         drawLines(gl, points, 2, true);
     }
 
+    /**
+     * opengl 画线
+     * @param gl
+     * @param points
+     * @param lineSize
+     * @param point
+     */
     private void drawLines(GL10 gl, float[] points, float lineSize, boolean point) {
 
         ByteBuffer vbb = ByteBuffer.allocateDirect(points.length * 4);
@@ -465,56 +326,12 @@ public class DrawRoute2D {
 
     }
 
-    private void drawRect(GL10 gl, float[] points, float lineSize, boolean point) {
-
-        ByteBuffer vbb = ByteBuffer.allocateDirect(points.length * 4);
-        vbb.order(ByteOrder.nativeOrder());
-        FloatBuffer vertexes = vbb.asFloatBuffer();
-        vertexes.put(points);
-        vertexes.position(0);
-
-
-        gl.glColor4f(1f, 1f,1f,1f);
-        gl.glLineWidth(lineSize);
-        gl.glPointSize(20);
-
-        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-
-        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexes);
-        gl.glDrawArrays(GL10.GL_TRIANGLES, 0, points.length/3);
-        if (point) {
-            gl.glDrawArrays(GL10.GL_POINTS, 0, points.length / 3);
-        }
-
-        gl.glFlush();
-        gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-
-    }
-
-    private void drawPoints(GL10 gl, float[] points, float lineSize) {
-
-        ByteBuffer vbb = ByteBuffer.allocateDirect(points.length * 4);
-        vbb.order(ByteOrder.nativeOrder());
-        FloatBuffer vertexes = vbb.asFloatBuffer();
-        vertexes.put(points);
-        vertexes.position(0);
-
-
-        gl.glColor4f(1f, 1f,1f,1f);
-//        gl.glLineWidth(lineSize);
-        gl.glPointSize(lineSize);
-
-        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-
-        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vertexes);
-//        gl.glDrawArrays(GL10.GL_TRIANGLES, 0, points.length/3);
-            gl.glDrawArrays(GL10.GL_POINTS, 0, points.length / 3);
-
-        gl.glFlush();
-        gl.glDisableClientState(GL10.GL_VERTEX_ARRAY);
-
-    }
-
+    /**
+     * 获取传入点与原点连线与 Y 轴的角度，原始视线为 Y 轴方向
+     * @param x
+     * @param y
+     * @return
+     */
     private double getEyeDirectionAngle(double x, double y) {
         return Util.calculateVectorAngle(x, y, 0f, 0.5f);
     }
