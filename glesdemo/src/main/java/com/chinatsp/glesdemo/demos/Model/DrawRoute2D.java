@@ -162,7 +162,7 @@ public class DrawRoute2D {
     }
 
     /**
-     * 计算路径点处的垂直路径线点
+     * 计算路径点处的垂直路径线点；计算方法：先让该向量与Y 正 重合，然后旋转该向量到原始角度，再平移到原向量位置
      * @param gl
      * @param startX
      * @param startY
@@ -233,7 +233,7 @@ public class DrawRoute2D {
         temp.addAll(right);
         float[] points = getPoints(temp);
 
-        //将所有点分为三角形，定义各个三角形顶点顺序
+        //将所有点分为三角形，定义各个三角形顶点顺序，按逆时针
         short[] vs = new short[left.size() * 6];
         short rightOffset = (short) left.size();
         int idx = 0;
