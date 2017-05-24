@@ -3,7 +3,9 @@
 
 
 #### 关键类
-package com.chinatsp.glesdemo.demos.Model/DrawRoute2D.java
+
++ Model 类： com.chinatsp.glesdemo.demos.Model/DrawRoute2D.java
++ 界面类： com.chinatsp.glesdemo.demos.DrawRoud2DActivity.java
 
 
 
